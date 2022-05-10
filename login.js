@@ -13,7 +13,7 @@ function validation(event) {
 }
 
 function vali(event) {
-  if (form.username.value.length == 0|| form.password.value.length == 0)
+  if (form.username.value.length == 0|| form.password.value.length == 0) {
     for (let inputBox of inputBoxs) {
       if (!document.querySelector('.empty-' + inputBox.name)) {
         const no = inputBox.parentNode;
@@ -23,8 +23,8 @@ function vali(event) {
         no.appendChild(err);
       }
     }
-
     event.preventDefault();
+  }
 }
 
 const form = document.forms['login'];
