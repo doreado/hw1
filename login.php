@@ -27,7 +27,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 
   <body>
     <h1>Mediashare</h1>
-    <form name="login" method="post">
+    <form name="login" method="post" action="home.php">
       <p><input type="text" name="username" placeholder="Username"></p> 
       <p><input type="password" name="password" placeholder="Password"></p> 
       <p><label>&nbsp;</label><input type="submit"></p>

@@ -15,7 +15,8 @@ function validation(event) {
 function vali(event) {
   if (form.username.value.length == 0|| form.password.value.length == 0) {
     for (let inputBox of inputBoxs) {
-      if (!document.querySelector('.empty-' + inputBox.name)) {
+      if (!document.querySelector('.empty-' + inputBox.name)
+        && form[inputBox.name].value.length == 0) {
         const no = inputBox.parentNode;
         const err = document.createElement('div');
         err.setAttribute('class', 'error' + ' empty' + '-' + inputBox.name);
