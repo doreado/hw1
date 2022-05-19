@@ -34,6 +34,10 @@ form {
   color: var(--gb-bright_red);
 }
 
+.validation-error{
+  color: var(--gb-bright_red);
+}
+
 #new-user {
   display: flex;
   flex-direction: row;
