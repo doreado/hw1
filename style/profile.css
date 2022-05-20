@@ -1,0 +1,117 @@
+body {
+  margin: 0;
+}
+
+header {
+  position: relative;
+  height: 750px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0px;
+  border-bottom: red 2px;
+}
+
+section {
+  padding: 20px;
+  margin: 0px 40px;
+}
+
+div#username {
+  position: absolute;
+  margin: auto;
+  bottom: 0;
+
+  z-index: 2;
+  font-size: 70px;
+  color: var(--gb-bright_orange);
+}
+
+div#cover {
+  position: absolute;
+
+  top: 0px;
+  width: 100%;
+  height: 75%;
+
+  background-position: center;
+  background-size: cover;
+
+  z-index: 0;
+}
+
+/* div#cover img { */
+/**/
+/* } */
+
+div#profile-pic {
+  position: absolute;
+  top: 60%;
+  height: 200px;
+  width: 200px;
+  z-index: 1;
+}
+
+div#profile-pic img, .post-profile-pic, .summary-profile-pic {
+  border-radius: 50%;
+  height: 100%;
+}
+
+div.view.hidden {
+  display: none;
+}
+
+.tab-row {
+  color: var(--gb-light0);
+  display: flex;
+  /* justify-content: center; */
+  /* flex-direction: row; */
+  /* align-items: center; */
+  /* justify-content: space-around; */
+}
+
+.tab-row-option {
+  width: 100%;
+  text-align: center;
+  border-bottom: 3px solid var(--gb-dark2);
+}
+
+.tab-row-option:hover{
+  color:#000!important;
+  background-color:#f1f1f1!important;
+}
+
+.tab-row-option.selected{
+  border-bottom: 3px solid var(--gb-neutral_red);
+}
+
+.movie-poster-box, .pic-box, .follower-pic-box, .following-pic-box {
+  display: flex;
+  flex-direction: row;
+  width: 30px;
+  height: 100px;
+}
+
+.movie-poster, .recently-poster-box{
+  height: 100px;
+  margin-right: 10px;
+}
+
+.recently-poster-box img {
+  height: 100%;
+}
+
+[data-view-type="recently"].post{
+  display: flex;
+}
+
+.entry-recently {
+  display: flex;
+  flex-direction: row;
+}
+
+.recently-left {
+  display: flex;
+}

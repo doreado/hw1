@@ -1,0 +1,88 @@
+@import url(./colors.css);
+
+nav {
+  z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 2px 20px;
+
+  background-color: var(--gb-dark0_soft);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#nav-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+body {
+  /* background-color: var(--gb-dark0); */
+  background-color: var(--dutch-white);
+  background-color: white;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:link {
+  color: var(--gb-bright_blue);
+}
+
+a:visited {
+  color: var(--gb-bright_blue);
+}
+
+h1 {
+  color: var(--gb-light4);
+}
+
+p {
+  color: black;
+}
+
+.post {
+  height: 666px;
+  width: 100%;
+}
+
+.post-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.post-header-left {
+  display: flex;  
+  align-items: center;
+  justify-content: space-between;
+}
+
+.post-profile-pic-box {
+  height: 60px;
+  width: 60px;
+  margin-right: 10px;
+}
+
+.post-profile-name {
+  /* color: var(--gb-neutral_aqua); */
+  color: black;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+#post-pic-box {
+  display: flex;
+  width: 100%;
+  height: 300px;
+  justify-content: center;
+}
+#post-pic-box img {
+  height: 100%;
+  /* width: 100%; */
+}
