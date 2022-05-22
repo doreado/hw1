@@ -1,13 +1,13 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['profile']) || !isset($_SESSION['user_id'])) {
   header("Location: login.php");
   exit();
 }
 
 require 'dbconf.php';
 
-$user_id = mysqli_real_escape_string($db, $_SESSION['user_id']);
+$user_id = mysqli_real_escape_string($db, $_SESSION['profile']);
 $query = "SELECT follower,profile_pic FROM FOLLOW JOIN USER_PICS ON follower=user WHERE following='".$user_id."';";
 $res = mysqli_query($db, $query);
 

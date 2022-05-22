@@ -4,41 +4,6 @@ function displayPost(post, view) {
   postCurr.classList.add("entry-recently");
   view.appendChild(postCurr);
 
-  // const postHeader = document.createElement("div");
-  // postHeader.setAttribute("class", "post-header");
-  // const postHeaderLeft = document.createElement("div");
-  // postHeaderLeft.setAttribute("class", "post-header-left");
-  // postHeader.appendChild(postHeaderLeft);
-
-  // const profilePicBox = document.createElement("div");
-  // const profilePic = document.createElement("img");
-  // profilePicBox.appendChild(profilePic);
-  // postHeaderLeft.appendChild(profilePicBox);
-  // fetch("http://localhost/hw1/get_pics.php?user_id=" + post.user)
-  //   .then(response => response.json())
-  //   .then(json => {
-  //     if (!json.profile_pic.empty) {
-  //       profilePicBox.classList.add("post-profile-pic-box")
-  //       profilePic.setAttribute("id", "post-" + post.id + "-profile-pic");
-  //       profilePic.setAttribute("class", "post-profile-pic");
-  //       profilePic.src = 'data:image/jpg;charset=utf8;base64,' + json.profile_pic.src;
-  //     }
-  //   });
-  //
-  // const postProfileName = document.createElement("div");
-  // postHeaderLeft.appendChild(postProfileName);
-  // fetch("http://localhost/hw1/username.php?user_id=" + post.user)
-  //   .then(response => response.json())
-  //   .then(json => {
-  //     if (json.success) {
-  //       postProfileName.setAttribute("id", "post-" + post.id + "-profile-name");
-  //       postProfileName.setAttribute("class", "post-profile-name");
-  //       postProfileName.textContent = json.username;
-  //     }
-  //   });
-  // postCurr.appendChild(postHeader);
-  //
-
   const posterBox = document.createElement("div");
   posterBox.classList.add("recently-poster-box");
   postCurr.appendChild(posterBox);
@@ -53,7 +18,7 @@ function displayPost(post, view) {
   rightElem.appendChild(movieTitle);
   const movieReview = document.createElement("p");
   rightElem.appendChild(movieReview);
-  fetch("http://localhost/hw1/get_movie.php?movie_id=" + post.type_id)
+  fetch("http://localhost/hw1/get_movie.php?id=" + post.type_id)
     .then(response => response.json())
     .then(json => {
       if (json.success) {
@@ -65,8 +30,8 @@ function displayPost(post, view) {
 }
 
 function viewPosts(data, view) {
-  for (let post of data) {
-    displayPost(post, view);
+  for (let entry of data) {
+    displayPost(entry, view);
   }
 }
 
@@ -93,6 +58,13 @@ function getPics() {
 }
 
 function createSettings() {
+  const tabRow = document.querySelector(".tab-row");
+  const tabOption = document.createElement("div");
+  tabOption.classList.add("tab-row-option");
+  tabOption.setAttribute("data-view-type", "settings");
+  tabOption.textContent = "Impostazioni";
+  tabRow.appendChild(tabOption);
+
   const view = document.createElement("div");
   view.setAttribute("class", "view hidden");
   view.setAttribute("data-view-type", "settings");
@@ -104,16 +76,16 @@ function createRecently() {
   view.setAttribute("class", "view hidden");
   view.setAttribute("data-view-type", "recently");
   document.querySelector(".tab-view").appendChild(view);
-  
+
   fetch("http://localhost/hw1/recently.php")
     .then(response => response.json())
     .then(json => {
       if (json.success) {
-        console.log(json.content);
-        viewPosts(json.content, view);
+        console.log(json.data);
+        viewPosts(json.data, view);
       } else {
         const hintBox = document.createElement("p");
-        hintBox.textContent = json.content;
+        hintBox.textContent = json.data;
         view.appendChild(hintBox);
       }
     });
@@ -221,6 +193,14 @@ function following(view) {
     });
 }
 
+function getUsername() {
+  fetch("http://localhost/hw1/username.php")
+    .then(response => response.json())
+    .then(json => {
+      if (json.success)
+        document.getElementById("username").textContent = json.username;
+    })
+}
 function createSummary() {
   const view = document.createElement("div");
   view.setAttribute("class", "view");
@@ -233,7 +213,6 @@ function createSummary() {
   // wantlist(view);
   follower(view);
   following(view);
-
 }
 
 const views = document.querySelectorAll(".tab-row-option");
@@ -262,6 +241,12 @@ const update = {
 const selected = document.querySelector(".tab-row-option.selected");
 
 getPics();
+getUsername();
 createSummary();
 createRecently();
-createSettings();
+fetch("http://localhost/hw1/is_logged_profile.php")
+  .then(response => response.json())
+  .then(json => {
+    if (json.result)
+      createSettings();
+  })

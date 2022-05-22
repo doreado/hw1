@@ -62,7 +62,7 @@ function displayPost(post, view) {
   const profilePic = document.createElement("img");
   profilePicBox.appendChild(profilePic);
   postHeaderLeft.appendChild(profilePicBox);
-  fetch("http://localhost/hw1/get_pics.php?user_id=" + post.user)
+  fetch("http://localhost/hw1/get_pics.php?u=" + post.user)
     .then(response => response.json())
     .then(json => {
       if (!json.profile_pic.empty) {
@@ -70,17 +70,10 @@ function displayPost(post, view) {
         profilePic.setAttribute("id", "post-" + post.id + "-profile-pic");
         profilePic.setAttribute("class", "post-profile-pic");
         profilePic.src = 'data:image/jpg;charset=utf8;base64,' + json.profile_pic.src;
-
-        if (json.success) {
-          postProfileName.setAttribute("id", "post-" + post.id + "-profile-name");
-          postProfileName.setAttribute("class", "post-profile-name");
-          postProfileName.textContent = json.username;
-        }
       }
     });
 
-  const postProfileName = document.createElement("div");
-
+  const postProfileName = document.createElement("a");
   postHeaderLeft.appendChild(postProfileName);
   fetch("http://localhost/hw1/username.php?user_id=" + post.user)
     .then(response => response.json())
@@ -88,6 +81,7 @@ function displayPost(post, view) {
       if (json.success) {
         postProfileName.setAttribute("id", "post-" + post.id + "-profile-name");
         postProfileName.setAttribute("class", "post-profile-name");
+        postProfileName.setAttribute("href", "http://localhost/hw1/profile.php?u=" + post.user);
         postProfileName.textContent = json.username;
       }
     });

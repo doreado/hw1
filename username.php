@@ -6,12 +6,12 @@ require 'dbconf.php';
 
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['profile']) && !isset($_SESSION['user_id'])) {
   header("Location: login.php");
   exit;
 }
 
-$user_id = isset($_GET['user_id']) ? $_GET['user_id'] : $_SESSION['user_id'];
+$user_id = isset($_GET['user_id']) ? $_GET['user_id'] : $_SESSION['profile'];
 
 $user_id = mysqli_real_escape_string($db, $user_id);
 $query = "SELECT username FROM USER where id='".$user_id."';";

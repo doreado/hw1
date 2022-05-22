@@ -4,7 +4,7 @@
 //
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['profile']) || !isset($_SESSION['user_id'])) {
   header('login.php');
   exit;
 }
@@ -23,10 +23,10 @@ $base_url = "http://api.themoviedb.org/3";
 $endpoint = "/movie/".$movie_id."/images?api_key=".$api_key;
 
 $curl = curl_init();
-curl_setopt($curl, CURLOPT_URL, $base_url.$endpoint); 
+curl_setopt($curl, CURLOPT_URL, $base_url.$endpoint);
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 $result = curl_exec($curl);
-curl_close($curl); 
+curl_close($curl);
 
 // echo $result;
 $base_url = "https://www.themoviedb.org/t/p/original/";

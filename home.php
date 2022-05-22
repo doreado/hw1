@@ -5,6 +5,11 @@ if (!isset($_SESSION['user_id'])) {
   header("Location: login.php");
   exit;
 }
+
+// if (isset($_SESSION['profile'])) {
+$_SESSION['profile'] = $_SESSION['user_id'];
+  // unset($_SESSION['profile']);
+// }
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +27,7 @@ if (!isset($_SESSION['user_id'])) {
   <nav>
     <div id = "title-link">
       <div id="nav-title"> MEDIASHARE </div>
-      <div> Benvenuto, <a id="profile" href="profile.php"><?php echo $_SESSION["username"]; ?></a> </div>
+      <div> Benvenuto, <a id="profile" href="profile.php?u=<?php echo $_SESSION['user_id'];?>"><?php echo $_SESSION["username"]; ?></a> </div>
     </div>
 
     <div>
@@ -40,16 +45,6 @@ if (!isset($_SESSION['user_id'])) {
           <div class="tab-row-option selected home-header-icon" data-view-type="movie"></div>
           <div class="tab-row-option home-header-icon" data-view-type="people"></div>
         </div>
-
-        <!-- <div id="content-new-post"> -->
-        <!--   <div> -->
-        <!--     <input id="input-movie" type="text" placeholder="Che film hai visto?"></input> -->
-        <!--     <button id="search-film-button">Cerca</button> -->
-        <!--   </div> -->
-        <!---->
-        <!--   <input id="post-text" type="text" placeholder="Cosa ti è piaciuto?"></input> -->
-        <!--   <button id="post-button">Invia</button> -->
-        <!-- </div> -->
       </div>
     </div>
 
