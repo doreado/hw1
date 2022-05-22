@@ -1,16 +1,48 @@
 let offset = 0;
 
+function updateLIke(target, action) {
+  if (['add', 'remove'].includes(action)) {
+    const postId = target.dataset.postId;
+    fetch("http://localhost/hw1/" + action + "_like.php?post_id=" + postId)
+      .then(response => response.json())
+      .then(json => {
+        if (!json.success) {
+          alert("Qualcosa è andata storto")
+        } else {
+          const num = document.querySelector("div[data-post-id='"+ postId + "'] span");
+          const currCount = parseInt(num.textContent);
+          num.textContent = action === "add" ? currCount + 1 : currCount - 1;
+        }
+      });
+  }
+}
+
+function decLike(target) {
+  updateLIke(target, "remove");
+}
+
+function incLike(target) {
+  updateLIke(target, "add");
+}
+
 function toggleLike(event) {
   let lastStatus = event.currentTarget.dataset.liked;
   // console.log("clicked " + clicked);
   // clicked = clicked === "false" ? "true" : "false";
-event.currentTarget.dataset.liked = event.currentTarget.dataset.liked === "false" ? "true" : "false";
+  event.currentTarget.dataset.liked = event.currentTarget.dataset.liked === "false" ? "true" : "false";
 
-  let img = document.querySelector("[data-post-id='" 
+  let img = document.querySelector("[data-post-id='"
     + event.currentTarget.dataset.postId + "'] img");
 
-  img.src = lastStatus === "false" ? 
+  img.src = lastStatus === "false" ?
     'figures/ciak_black.png' : 'figures/ciak_white.png';
+  if (lastStatus === "false") {
+    img.src = 'figures/ciak_black.png';
+    incLike(event.currentTarget);
+  } else {
+    img.src ='figures/ciak_white.png';
+    decLike(event.currentTarget);
+  }
   // event.currentTarget.setAttribute("data-liked", !event.currentTarget.dataset.liked);
 }
 
@@ -38,15 +70,15 @@ function displayPost(post, view) {
         profilePic.setAttribute("id", "post-" + post.id + "-profile-pic");
         profilePic.setAttribute("class", "post-profile-pic");
         profilePic.src = 'data:image/jpg;charset=utf8;base64,' + json.profile_pic.src;
+
+        if (json.success) {
+          postProfileName.setAttribute("id", "post-" + post.id + "-profile-name");
+          postProfileName.setAttribute("class", "post-profile-name");
+          postProfileName.textContent = json.username;
+        }
       }
     });
 
-      if (json.success) {
-        postProfileName.setAttribute("id", "post-" + post.id + "-profile-name");
-        postProfileName.setAttribute("class", "post-profile-name");
-        postProfileName.textContent = json.username;
-      }
-  }
   const postProfileName = document.createElement("div");
 
   postHeaderLeft.appendChild(postProfileName);
@@ -131,7 +163,6 @@ function getPost() {
     .then(response => response.json())
     .then(json => {
       if (json.success) {
-        console.log(json.content);
         viewPosts(json.content);
         offset += 10;
       } else {
@@ -142,50 +173,127 @@ function getPost() {
     })
 }
 
+function createMovieView(movieView) {
+  const searchBox = document.createElement("div");
+  movieView.appendChild(searchBox);
+
+  const searchInput = document.createElement("input");
+  searchInput.setAttribute("id", "input-movie");
+  searchInput.setAttribute("type", "text");
+  searchInput.setAttribute("placeholder", "Che film hai visto?");
+  searchBox.appendChild(searchInput);
+
+  const searchButton = document.createElement("button");
+  searchButton.setAttribute("id", "search-film-button");
+  searchButton.textContent = "Cerca";
+  searchBox.appendChild(searchButton);
+
+  const postText = document.createElement("input");
+  postText.setAttribute("id", "post-text");
+  postText.setAttribute("type", "text");
+  postText.setAttribute("placeholder", "Cosa ti è piaciuto");
+  movieView.appendChild(postText);
+
+  const postButton = document.createElement("button");
+  postButton.setAttribute("id", "post-button");
+  postButton.textContent = "Invia";
+  movieView.appendChild(postButton);
+}
+
+function createPeopleView(peopleView) {
+  const searchBox = document.createElement("div");
+  peopleView.appendChild(searchBox);
+
+  const searchInput = document.createElement("input");
+  searchInput.setAttribute("id", "input-people");
+  searchInput.setAttribute("type", "text");
+  searchInput.setAttribute("placeholder", "Cerca qualcuno");
+  searchBox.appendChild(searchInput);
+
+  const searchButton = document.createElement("button");
+  searchButton.setAttribute("id", "seatrch-film-button");
+  searchButton.textContent = "Cerca";
+  searchBox.appendChild(searchButton);
+}
+
 // const profilePicHome = document.querySelector("profile-pic-home")
-const section = document.querySelector("section");
-fetch("http://localhost/hw1/get_pics.php")
-  .then(response => response.json())
-  .then(json => {
-    if (!json.profile_pic.empty) {
-      const profilePic = document.getElementById("profile-pic");
-      const img = document.createElement("img");
-      img.src = 'data:image/jpg;charset=utf8;base64,' + json.profile_pic.src;
-      profilePic.appendChild(img);
-    } else {
-      // TODO: fallback icon and add button to add profile pic
-    }
-  });
+function displayHomeHeader() {
+  const movieIconBox = document.querySelector(".tab-row-option[data-view-type='movie']");
+  const movieIcon = document.createElement("img");
+  movieIcon.src = "figures/movie.png";
+  movieIconBox.appendChild(movieIcon);
 
-const movieIcon = document.getElementById("movie-icon");
-const moviePic = document.createElement("img");
-moviePic.src = "figures/movie.png";
-movieIcon.appendChild(moviePic);
+  const headerRight = movieIconBox.parentNode.parentNode;
+  const movieView = document.createElement("div");
+  movieView.classList.add("view");
+  movieView.setAttribute("data-view-type", 'movie');
+  headerRight.appendChild(movieView);
 
-moviePic.addEventListener('click', _ => {
-  document.getElementById("modal-post").style.display = 'block';
-  // fetch movie
-  // display results
-});
+  createMovieView(movieView);
 
-const postText = document.getElementById("post-text");
-const postButton = document.getElementById("post-button");
-postButton.addEventListener('click', _ => {
-  // il type deve essere parametrico
-  fetch("http://localhost/hw1/add_post.php?content=" + postText.value + "&type=movie&type_id=" + resultMovie.id)
-})
+  const peopleIconBox = document.querySelector("[data-view-type='people']");
+  const peopleIcon = document.createElement("img");
+  peopleIcon.src = "figures/people_black.png";
+  peopleIconBox.appendChild(peopleIcon);
 
-let resultMovie;
-const inputMovie = document.getElementById("input-movie");
-const searchMovieButton = document.getElementById("search-film-button");
-searchMovieButton.addEventListener('click', _ => {
-  // console.log(inputMovie.value);
-  fetch("http://localhost/hw1/search_movie.php?movie=" + inputMovie.value)
+  const peopleView = document.createElement("div");
+  peopleView.classList.add("view");
+  peopleView.classList.add("hidden");
+  peopleView.setAttribute("data-view-type", 'people');
+  headerRight.appendChild(peopleView);
+
+  createPeopleView(peopleView);
+
+
+  const views = document.querySelectorAll(".tab-row-option");
+  for (let view of views) {
+    view.addEventListener('click', event => {
+      const lastSelected = document.querySelector(".tab-row-option.selected");
+      lastSelected.classList.remove("selected");
+      document.querySelector("div.view[data-view-type="
+          + lastSelected.dataset.viewType + "]").classList.add("hidden");
+
+      event.currentTarget.classList.add("selected");
+      document.querySelector("div.view[data-view-type=" +
+            event.currentTarget.dataset.viewType + "]")
+          .classList.remove("hidden");
+    });
+  }
+
+  fetch("http://localhost/hw1/get_pics.php")
     .then(response => response.json())
     .then(json => {
-      // suppongo di predere il primo risultato
-      resultMovie = json['results'][0];
+      if (!json.profile_pic.empty) {
+        const profilePic = document.getElementById("profile-pic");
+        const img = document.createElement("img");
+        img.src = 'data:image/jpg;charset=utf8;base64,' + json.profile_pic.src;
+        profilePic.appendChild(img);
+      } else {
+        // TODO: fallback icon and add button to add profile pic
+      }
     });
-});
 
+  const postText = document.getElementById("post-text");
+  const postButton = document.getElementById("post-button");
+  postButton.addEventListener('click', _ => {
+    // il type deve essere parametrico
+    fetch("http://localhost/hw1/add_post.php?content=" + postText.value + "&type=movie&type_id=" + resultMovie.id)
+  })
+
+  let resultMovie;
+  const inputMovie = document.getElementById("input-movie");
+  const searchMovieButton = document.getElementById("search-film-button");
+  searchMovieButton.addEventListener('click', _ => {
+    // console.log(inputMovie.value);
+    fetch("http://localhost/hw1/search_movie.php?movie=" + inputMovie.value)
+      .then(response => response.json())
+      .then(json => {
+        // suppongo di predere il primo risultato
+        resultMovie = json['results'][0];
+      });
+  });
+}
+
+const section = document.querySelector("section");
+displayHomeHeader();
 getPost();

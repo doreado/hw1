@@ -63,30 +63,6 @@ div.view.hidden {
   display: none;
 }
 
-.tab-row {
-  color: var(--gb-light0);
-  display: flex;
-  /* justify-content: center; */
-  /* flex-direction: row; */
-  /* align-items: center; */
-  /* justify-content: space-around; */
-}
-
-.tab-row-option {
-  width: 100%;
-  text-align: center;
-  border-bottom: 3px solid var(--gb-dark2);
-}
-
-.tab-row-option:hover{
-  color:#000!important;
-  background-color:#f1f1f1!important;
-}
-
-.tab-row-option.selected{
-  border-bottom: 3px solid var(--gb-neutral_red);
-}
-
 .movie-poster-box, .pic-box, .follower-pic-box, .following-pic-box {
   display: flex;
   flex-direction: row;

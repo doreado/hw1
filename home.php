@@ -25,10 +25,6 @@ if (!isset($_SESSION['user_id'])) {
       <div> Benvenuto, <a id="profile" href="profile.php"><?php echo $_SESSION["username"]; ?></a> </div>
     </div>
 
-    <form name = "search">
-      <input type="text" placeholder="Search...">
-      <button type="submit"><i class="fa fa-search"></i></button>
-    </form>
     <div>
       <a href="logout.php">Logout</a>
     </div>
@@ -36,20 +32,24 @@ if (!isset($_SESSION['user_id'])) {
   </body>
 
   <section>
-    <div id="new-post">
+    <div id="home-header">
       <div id="profile-pic"></div>
-      <div id="content-new-post">
-        <div id="icon-link">
-          <div id="movie-icon"></div>
+      <div id="home-header-right">
+
+        <div class="tab-row">
+          <div class="tab-row-option selected home-header-icon" data-view-type="movie"></div>
+          <div class="tab-row-option home-header-icon" data-view-type="people"></div>
         </div>
 
-        <div>
-          <input id="input-movie" type="text" placeholder="Che film hai visto?"></input>
-          <button id="search-film-button">Cerca</button>
-        </div>
-
-        <input id="post-text" type="text" placeholder="Cosa ti è piaciuto?"></input>
-        <button id="post-button">Invia</button>
+        <!-- <div id="content-new-post"> -->
+        <!--   <div> -->
+        <!--     <input id="input-movie" type="text" placeholder="Che film hai visto?"></input> -->
+        <!--     <button id="search-film-button">Cerca</button> -->
+        <!--   </div> -->
+        <!---->
+        <!--   <input id="post-text" type="text" placeholder="Cosa ti è piaciuto?"></input> -->
+        <!--   <button id="post-button">Invia</button> -->
+        <!-- </div> -->
       </div>
     </div>
 
