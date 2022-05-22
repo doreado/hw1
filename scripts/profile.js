@@ -137,7 +137,7 @@ function follower(view) {
       view.appendChild(followerBox);
 
       const titleBox = document.createElement("h1");
-      titleBox.textContent = "Chi ti segue";
+      titleBox.textContent = "Seguaci";
       followerBox.appendChild(titleBox);
 
       if (json.success) {
