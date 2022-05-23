@@ -111,3 +111,7 @@ p {
 .tab-row-option.selected{
   border-bottom: 3px solid var(--gb-neutral_red);
 }
+
+.hidden {
+  display: none;
+}

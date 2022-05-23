@@ -65,7 +65,7 @@ div#icon-links {
   display: flex;
 }
 
-.post {
+.post, .search-result-box {
   background-color: var(--quick-silver);
   padding: 10px;
   margin-bottom: 10px;
@@ -114,3 +114,43 @@ div#post-text {
 .view.hidden {
   display: none;
 }
+
+.back-icon-box {
+  height: 30px;
+  margin-bottom: 10px;
+}
+
+.x-icon-box {
+  height: 20px;
+  margin: 0px;
+  align-items: center;
+}
+
+.x-icon, .back-icon {
+  height: 100%;
+  border-radius: 50%;
+  padding: 2px;
+}
+.poster-box {
+  width: 100px;
+  height: 100px;
+}
+
+.result-box {
+  display: flex;
+}
+
+#search-movie-box {
+  display: flex;
+  align-items: center;
+}
+
+.back-icon:hover, .result-box:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.poster {
+  height: 100%;
+}
+/* .search-result-box { */
+/**/
+/* } */

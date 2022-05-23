@@ -48,8 +48,6 @@ $_SESSION['profile'] = $_SESSION['user_id'];
       </div>
     </div>
 
-    <div id="modal-post" class="modal">
-      <div id="modal-content"></div>
-    </div>
+    <div id="home-posts"></div>
   </section>
 </html>
