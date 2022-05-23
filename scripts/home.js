@@ -35,12 +35,12 @@ function toggleLike(event) {
     + event.currentTarget.dataset.postId + "'] img");
 
   img.src = lastStatus === "false" ?
-    'figures/ciak_black.png' : 'figures/ciak_white.png';
+    'figures/ciak_dark.png' : 'figures/ciak_light.png';
   if (lastStatus === "false") {
-    img.src = 'figures/ciak_black.png';
+    img.src = 'figures/ciak_dark.png';
     incLike(event.currentTarget);
   } else {
-    img.src = 'figures/ciak_white.png';
+    img.src = 'figures/ciak_light.png';
     decLike(event.currentTarget);
   }
   // event.currentTarget.setAttribute("data-liked", !event.currentTarget.dataset.liked);
@@ -142,7 +142,7 @@ function displayPost(post, view) {
   postFoot.appendChild(commentIconBox);
 
   const commentIcon = document.createElement("img");
-  commentIcon.src = './figures/comment_black.png';
+  commentIcon.src = './figures/comment_dark.png';
   commentIconBox.appendChild(commentIcon);
 }
 
@@ -313,7 +313,7 @@ function displayTabRowOption() {
 
   const peopleIconBox = document.querySelector("[data-view-type='people']");
   const peopleIcon = document.createElement("img");
-  peopleIcon.src = "figures/people_black.png";
+  peopleIcon.src = "figures/people_dark.png";
   peopleIconBox.appendChild(peopleIcon);
 
   const peopleView = document.createElement("div");

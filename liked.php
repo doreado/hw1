@@ -23,7 +23,7 @@ $res = mysqli_query($db, $query);
 $success = false;
 if ($res) {
   $success = true;
-  $like_pic = mysqli_num_rows($res) > 0 ? 'figures/ciak_black.png' : 'figures/ciak_white.png';
+  $like_pic = mysqli_num_rows($res) > 0 ? 'figures/ciak_dark.png' : 'figures/ciak_light.png';
   $liked = mysqli_num_rows($res) > 0;
 }
 
