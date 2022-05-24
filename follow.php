@@ -20,8 +20,6 @@ $followed = !isset($_GET['followed_id']) && isset($_SESSION['profile']) ?
     mysqli_real_escape_string($db, $_SESSION['profile']) :
     mysqli_real_escape_string($db, $_GET['followed_id']);
 
-echo $followed;
-
 $follower = mysqli_real_escape_string($db, $_SESSION['user_id']);
 
 $insert_query = "INSERT INTO FOLLOW VALUES (".$follower.",".$followed.");";
