@@ -31,11 +31,11 @@ a {
 }
 
 a:link {
-  color: var(--gb-bright_blue);
+  color: var(--ash-gray);
 }
 
 a:visited {
-  color: var(--gb-bright_blue);
+  color: var(--ash-gray);
 }
 
 h1 {
@@ -47,7 +47,6 @@ p {
 }
 
 .post {
-  height: 666px;
   width: 100%;
 }
 
@@ -79,7 +78,8 @@ p {
 #post-pic-box {
   display: flex;
   width: 100%;
-  height: 300px;
+  height: 500px;
+  margin-bottom: 15px;
   justify-content: center;
 }
 #post-pic-box img {

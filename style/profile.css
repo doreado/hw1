@@ -20,6 +20,8 @@ section {
 }
 
 div#username {
+  display: flex;
+  align-items: center;
   position: absolute;
   margin: auto;
   bottom: 0;
@@ -90,4 +92,20 @@ div.view.hidden {
 
 .recently-left {
   display: flex;
+}
+
+.icon-box:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.icon-box {
+  display: flex;
+  height: 40px;
+  width: 40px;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.icon {
+  height: 100%;
 }

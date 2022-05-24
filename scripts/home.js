@@ -49,6 +49,7 @@ function toggleLike(event) {
 function displayPost(post, view) {
   const postCurr = document.createElement("div");
   postCurr.setAttribute("id", post.id);
+  postCurr.setAttribute("data-post-user-id", post.user);
   postCurr.classList.add("post");
   view.appendChild(postCurr);
 
@@ -156,6 +157,7 @@ function getPosts() {
   fetch("http://localhost/hw1/get_posts.php/?offset=" + offset)
     .then(response => response.json())
     .then(json => {
+      console.log(json);
       if (json.success) {
         viewPosts(json.content, document.querySelector("#home-posts"));
         offset += 10;
@@ -197,10 +199,12 @@ function createPeopleView(peopleView) {
   searchInput.setAttribute("placeholder", "Cerca qualcuno");
   searchBox.appendChild(searchInput);
 
-  const searchButton = document.createElement("button");
-  searchButton.setAttribute("id", "seatrch-film-button");
-  searchButton.textContent = "Cerca";
-  searchBox.appendChild(searchButton);
+  const searchPeopleButton = document.createElement("button");
+  searchPeopleButton.setAttribute("id", "search-people-button");
+  searchPeopleButton.textContent = "Cerca";
+  searchPeopleButton.addEventListener('click', onSearchPeopleButtonClick);
+
+  searchBox.appendChild(searchPeopleButton);
 }
 
 function onResultBoxClick(event) {
@@ -285,6 +289,77 @@ function displaySearchResult(result) {
   resultBox.appendChild(title);
 }
 
+function updateHome(followed, toAdd) {
+  if (toAdd) {
+    document.getElementById('home-posts').innerHTML = '';
+    offset = 0;
+    getPosts();
+  } else {
+    const postsFollowed = document.querySelectorAll(".post[data-post-user-id='" + followed + "']");
+    for (let post of postsFollowed) {
+      console.log(post);
+      post.parentNode.removeChild(post);
+    }
+  }
+}
+
+function onFollowButton(event) {
+  const clicked = event.currentTarget;
+  const toFollow = clicked.dataset.followed !== 'true';
+  console.log("toFollow " + toFollow);
+  clicked.setAttribute("data-followed", toFollow);
+  clicked.src = toFollow ? 'figures/followed_dark.png' : 'figures/not_followed_dark.png';
+  fetch("http://localhost/hw1/follow.php?followed_id="
+    + clicked.dataset.followedId + "&to_follow=" + toFollow)
+    .then(response => response.json())
+    .then(json => {
+      if (!json.success) {
+        alert("Qualcosa è andato storto. Per favore ricarica la pagina");
+      }
+    })
+
+  updateHome(clicked.dataset.followedId, toFollow);
+}
+
+function displayUserSearchResult(result) {
+  console.log(result);
+  document.querySelector(".tab-row-option[data-view-type='movie']")
+    .removeEventListener('click', onTabRowOptionClick);
+
+  const searchResultBox = document.querySelector(".search-result-box");
+  const resultBox = document.createElement("div");
+  resultBox.setAttribute("data-user-id", result.id);
+  resultBox.setAttribute("data-username", result.username);
+  resultBox.setAttribute("class", "users-result-box");
+  searchResultBox.appendChild(resultBox);
+  // resultBox.addEventListener('click', onResultBoxClick);
+
+  // aggiungi link per la pagina utente e il bottone per aggiunngere il profilo
+  const posterBox = document.createElement("div");
+  posterBox.classList.add("profile-pic-box");
+  resultBox.appendChild(posterBox);
+  const poster = document.createElement("img");
+  poster.classList.add("profile-pic");
+  poster.src = 'data:image/jpg;charset=utf8;base64,' + result.profile_pic;
+  posterBox.appendChild(poster);
+
+  const title = document.createElement("a");
+  title.setAttribute('href', "http://localhost/hw1/profile.php?u=" + result.id);
+  title.textContent = result.username;
+  resultBox.appendChild(title);
+
+  const followButtonBox = document.createElement("div");
+  followButtonBox.setAttribute("class", "follow-button-box");
+  resultBox.appendChild(followButtonBox);
+  const followButton = document.createElement("img");
+  followButton.setAttribute("class", "follow-button")
+  followButtonBox.appendChild(followButton);
+  followButton.src = result.followed ? 'figures/followed_dark.png' : 'figures/not_followed_dark.png';
+  followButton.setAttribute("data-followed", result.followed);
+  followButton.setAttribute("data-followed-id", result.id);
+  followButton.addEventListener('click', onFollowButton);
+}
+
 function onTabRowOptionClick(event) {
   const lastSelected = document.querySelector(".tab-row-option.selected");
   lastSelected.classList.remove("selected");
@@ -345,13 +420,47 @@ function displayProfilePic() {
     });
 }
 
-let end = false;
 function onBackIconClick() {
   document.querySelector(".tab-row-option[data-view-type='people']")
     .addEventListener('click', onTabRowOptionClick);
 
   section.removeChild(document.querySelector(".search-result-box"));
   document.getElementById("home-posts").classList.remove("hidden");
+
+  updateHome();
+}
+
+function onSearchPeopleButtonClick(event) {
+  const query = document.getElementById('input-people').value;
+  if (query.length == 0) {
+    return;
+  }
+
+  fetch("http://localhost/hw1/search_users.php?u=" + query)
+    .then(response => response.json())
+    .then(json => {
+      if (json.success) {
+        const s = document.querySelector(".search-result-box");
+        if (s) section.removeChild(s);
+        const searchResultBox = document.createElement('div');
+        searchResultBox.classList.add("search-result-box");
+        section.appendChild(searchResultBox)
+
+        const backIconBox = document.createElement('div');
+        backIconBox.classList.add('back-icon-box');
+        searchResultBox.appendChild(backIconBox);
+        const backIcon = document.createElement('img');
+        backIcon.classList.add("back-icon");
+        backIcon.src = 'figures/back_icon_dark.png';
+        backIconBox.appendChild(backIcon);
+        backIconBox.addEventListener('click', onBackIconClick);
+
+        document.querySelector("#home-posts").classList.add("hidden");
+        for (let result of json.data) {
+          displayUserSearchResult(result);
+        }
+      }
+    })
 }
 
 function onSearchMovieButtonClick(event) {
@@ -373,17 +482,16 @@ function onSearchMovieButtonClick(event) {
 
         const backIconBox = document.createElement('div');
         backIconBox.classList.add('back-icon-box');
+        backIconBox.addEventListener('click', onBackIconClick);
         searchResultBox.appendChild(backIconBox);
         const backIcon = document.createElement('img');
         backIcon.classList.add("back-icon");
         backIcon.src = 'figures/back_icon_dark.png';
         backIconBox.appendChild(backIcon);
-        backIconBox.addEventListener('click', onBackIconClick);
 
         // if (turnBack) return;
         document.querySelector("#home-posts").classList.add("hidden");
         // create search result layout
-        console.log(json.data)
         for (let result of json.data) {
           displaySearchResult(result);
           // add listener in result

@@ -2,7 +2,7 @@
 
 section {
   /* text-align: center; */
-  margin:  49px 250px 0px 250px;
+  margin:  49px auto 0px auto;
 }
 
 #home-header {
@@ -41,7 +41,7 @@ div#content-new-post {
   width: 100%;
 }
 
-div#profile-pic {
+.profile-pic-box, div#profile-pic {
   /* position: absolute; */
   /* top: 60%; */
   height: 80px;
@@ -50,7 +50,7 @@ div#profile-pic {
   /* z-index: 1; */
 }
 
-div#profile-pic img, .post-profile-pic {
+.profile-pic, div#profile-pic img, .post-profile-pic {
   border-radius: 50%;
   height: 100%;
 }
@@ -95,13 +95,14 @@ div#post-text {
   justify-content: space-between;
   align-items: center;
   padding: 4px;
-
-  background-color: var(--silver-sand);
+  border-top: 3px solid var(--ash-gray);
 }
 
 .icon-box {
   display: flex;
   align-items: center;
+  border-radius: 50%;
+  padding: 7px;
   height: 30px;
   width: 30px;
 }
@@ -122,15 +123,20 @@ div#post-text {
 
 .x-icon-box {
   height: 20px;
-  margin: 0px;
   align-items: center;
 }
 
-.x-icon, .back-icon {
+.follow-button-box {
+  height: 30px;
+  align-items: center;
+}
+
+.follow-button, .x-icon, .back-icon {
   height: 100%;
   border-radius: 50%;
   padding: 2px;
 }
+
 .poster-box {
   width: 100px;
   height: 100px;
@@ -140,14 +146,21 @@ div#post-text {
   display: flex;
 }
 
+.users-result-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 #search-movie-box {
   display: flex;
   align-items: center;
 }
 
-.back-icon:hover, .result-box:hover {
+.icon-box:hover, .follow-button:hover, .back-icon:hover, .result-box:hover {
   background-color: rgba(0, 0, 0, 0.2);
 }
+
 .poster {
   height: 100%;
 }

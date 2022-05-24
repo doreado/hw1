@@ -1,3 +1,17 @@
+function onFollowButton(event) {
+  const clicked = event.currentTarget;
+  const toFollow = clicked.dataset.followed !== 'true';
+  clicked.setAttribute("data-followed", toFollow);
+  clicked.src = toFollow ? 'figures/followed_dark.png' : 'figures/not_followed_dark.png';
+  fetch("http://localhost/hw1/follow.php?&to_follow=" + toFollow)
+    .then(response => response.json())
+    .then(json => {
+      if (!json.success) {
+        alert("Qualcosa è andato storto. Per favore ricarica la pagina");
+      }
+    })
+}
+
 function displayPost(post, view) {
   const postCurr = document.createElement("div");
   postCurr.setAttribute("id", post.id);
@@ -193,14 +207,33 @@ function following(view) {
     });
 }
 
-function getUsername() {
-  fetch("http://localhost/hw1/username.php")
+async function getUsername() {
+  const username = document.getElementById("username");
+  await fetch("http://localhost/hw1/username.php")
     .then(response => response.json())
     .then(json => {
-      if (json.success)
-        document.getElementById("username").textContent = json.username;
+      if (json.success) {
+        username.textContent = json.username;
+      }
+    });
+
+  fetch("http://localhost/hw1/followed.php")
+    .then(response => response.json())
+    .then(json => {
+      if (json.success) {
+        const box = document.createElement('div');
+        box.classList.add('icon-box');
+        username.appendChild(box);
+        const image = document.createElement('img');
+        image.setAttribute("data-followed", json.followed)
+        image.classList.add('icon');
+        image.addEventListener('click', onFollowButton);
+        image.src = image.dataset.followed === 'true' ? 'figures/followed_dark.png' : 'figures/not_followed_dark.png';
+        box.appendChild(image)
+      }
     })
 }
+
 function createSummary() {
   const view = document.createElement("div");
   view.setAttribute("class", "view");
@@ -249,4 +282,6 @@ fetch("http://localhost/hw1/is_logged_profile.php")
   .then(json => {
     if (json.result)
       createSettings();
+    else {
+    }
   })
