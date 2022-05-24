@@ -14,12 +14,10 @@ $res = mysqli_query($db, $query);
 if (mysqli_num_rows($res) > 0) {
   $success = true;
   $content = array();
-  $count = 0;
   while ($row = mysqli_fetch_assoc($res)) {
-    $content[$count] = [ 'following' => $row['following'],
-                         'profile_pic' => base64_encode($row['profile_pic'])
+    $content[] = [ 'following' => $row['following'],
+                   'profile_pic' => base64_encode($row['profile_pic'])
                       ];
-    $count++;
   }
 } else {
   $success = false;
