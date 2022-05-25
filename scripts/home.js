@@ -51,7 +51,7 @@ function displayPost(post, view) {
   postCurr.setAttribute("id", post.id);
   postCurr.setAttribute("data-post-user-id", post.user);
   postCurr.classList.add("post");
-  view.appendChild(postCurr);
+  view.insertBefore(postCurr, view.firstChild);
 
   const postHeader = document.createElement("div");
   postHeader.setAttribute("class", "post-header");
@@ -148,7 +148,7 @@ function displayPost(post, view) {
 }
 
 function viewPosts(data, view) {
-  for (let post of data) {
+  for (let post of data.reverse()) {
     displayPost(post, view);
   }
 }
@@ -258,6 +258,23 @@ function onResultBoxClick(event) {
     // il type deve essere parametrico
     if (postText.value.length > 0) {
       fetch("http://localhost/hw1/add_post.php?content=" + postText.value + "&type=movie&type_id=" + movieId)
+        .then(response => response.json())
+        .then(json => {
+          if (json.success) {
+            displayPost(json.data, document.querySelector("#home-posts"));
+
+            const searchMovieBox = document.getElementById('search-movie-box');
+            const xIconBox = document.querySelector('.x-icon-box');
+            xIconBox.parentNode.removeChild(xIconBox);
+            const selectedMovie = document.querySelector('div#search-movie-box p');
+            selectedMovie.parentNode.removeChild(selectedMovie);
+            document.getElementById("post-text").parentNode.removeChild(document.getElementById("post-text"));
+            document.getElementById("post-button").parentNode.removeChild(document.getElementById("post-button"));
+            for (let child of searchMovieBox.childNodes) {
+              child.classList.remove("hidden");
+            }
+          }
+        })
     }
   });
 

@@ -21,14 +21,19 @@ $type = mysqli_real_escape_string($db, $_GET['type']);
 $type_id = mysqli_real_escape_string($db, $_GET['type_id']);
 $content = mysqli_real_escape_string($db, $_GET['content']);
 
-$query = "INSERT INTO POST(user, content, type, type_id, time) 
+$query = "INSERT INTO POST(user, content, type, type_id, time)
           VALUES (".$user.",'".$content."','".$type."','".$type_id."',CURRENT_TIMESTAMP);";
-
-echo $query;
 $success = mysqli_query($db, $query);
+if ($success) {
+  $query = "SELECT * FROM POST WHERE id=".mysqli_insert_id($db).";";
+  $res = mysqli_query($db, $query);
+  $data = mysqli_fetch_assoc($res);
+} else {
+  $data = '';
+}
+
 mysqli_close($db);
 
-$response = ['success' => $success];
-
+$response = ['success' => $success, 'data' => $data];
 echo json_encode($response);
 ?>
