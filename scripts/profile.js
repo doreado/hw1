@@ -200,6 +200,43 @@ function follower(view) {
     });
 }
 
+function watchlist(view) {
+  fetch("http://localhost/hw1/get_watchlist.php")
+    .then(response => response.json())
+    .then(json => {
+      if (json.success) {
+        console.log(json);
+        const watchlist = document.createElement("div");
+        watchlist.classList.add("summary-box");
+        view.appendChild(watchlist);
+
+        const titleBox = document.createElement("h1");
+        titleBox.textContent = "Watchlist";
+        watchlist.appendChild(titleBox);
+
+        const posterBox = document.createElement("div");
+        posterBox.classList.add("movie-poster-box");
+        watchlist.appendChild(posterBox);
+
+        for (let film of json.data) {
+          fetch("http://localhost/hw1/get_movie_poster.php?movie_id=" + film.type_id)
+            .then(response => response.json())
+            .then(json => {
+              const poster = document.createElement("img");
+              poster.classList.add("movie-poster");
+              poster.src =  json.src;
+              posterBox.appendChild(poster);
+            })
+        }
+      } else {
+        const hintBox = document.createElement("p");
+        hintBox.textContent = json.content;
+
+        watchedFilmsBox.appendChild(hintBox);
+      }
+    });
+}
+
 function following(view) {
   fetch("http://localhost/hw1/following.php")
     .then(response => response.json())
@@ -272,7 +309,7 @@ function createSummary() {
   watchedFilms(view);
   // readBooks();
   // listenedMusic();
-  // wantlist(view);
+  watchlist(view);
   follower(view);
   following(view);
 }

@@ -235,7 +235,7 @@ function onResultBoxClick(event) {
   document.querySelector(".tab-row-option[data-view-type='people']")
     .addEventListener('click', onTabRowOptionClick);
 
-  section.removeChild(document.querySelector(".search-result-box"));
+  section.removeChild(document.querySelector(".search-results-box"));
   document.getElementById("home-posts").classList.remove("hidden");
 
   const searchMovieBox = document.getElementById("search-movie-box");
@@ -303,29 +303,66 @@ function onResultBoxClick(event) {
   view.appendChild(postButton);
 }
 
+function onClickWatchlistButtonBox(event) {
+  event.stopPropagation();
+
+  const target = event.currentTarget;
+  const movieId = target.parentNode.dataset.movieId;
+  fetch("http://localhost/hw1/watchlist.php?movie_id=" + movieId)
+    .then(response => response.json())
+    .then(json => {
+      if (json.success) {
+        console.log(json);
+        const img = target.childNodes[0];
+        img.dataset.inWatchlist = json.in_watchlist;
+        img.src = json.in_watchlist ?
+          'figures/in_watchlist.png' : 'figures/not_in_watchlist.png';
+      }
+    })
+}
+
 function displaySearchResult(result) {
+  console.log(result);
   document.querySelector(".tab-row-option[data-view-type='people']")
     .removeEventListener('click', onTabRowOptionClick);
 
-  const searchResultBox = document.querySelector(".search-result-box");
+  const searchResultBox = document.querySelector(".search-results-box");
   const resultBox = document.createElement("div");
   resultBox.setAttribute("data-movie-id", result.id);
   resultBox.setAttribute("data-movie-title", result.title);
   resultBox.setAttribute("class", "result-box");
-  searchResultBox.appendChild(resultBox);
   resultBox.addEventListener('click', onResultBoxClick);
+  searchResultBox.appendChild(resultBox);
 
+  const resultBoxLeft = document.createElement('div');
+  resultBoxLeft.setAttribute("class", "result-box-left");
+  resultBox.appendChild(resultBoxLeft);
   const posterBox = document.createElement("div");
   posterBox.classList.add("poster-box");
-  resultBox.appendChild(posterBox);
+  resultBoxLeft.appendChild(posterBox);
   const poster = document.createElement("img");
   poster.classList.add("poster");
   poster.src = result.poster;
   posterBox.appendChild(poster);
-
   const title = document.createElement("h1");
   title.textContent = result.title;
-  resultBox.appendChild(title);
+  resultBoxLeft.appendChild(title);
+
+  if (result.watched) {
+    const watched = document.createElement("p");
+    watched.textContent = "Già visto";
+    resultBox.appendChild(watched);
+  } else {
+    const watchlistButtonBox = document.createElement("div");
+    watchlistButtonBox.setAttribute("class", "watchlist-button-box");
+    watchlistButtonBox.addEventListener('click', onClickWatchlistButtonBox);
+    resultBox.appendChild(watchlistButtonBox);
+    const watchlistButton = document.createElement("img");
+    watchlistButton.setAttribute("class", "watchlist-button");
+    watchlistButton.setAttribute("data-in-watchlist", result.watchlist);
+    watchlistButton.src = result.watchlist ? 'figures/in_watchlist.png' : 'figures/not_in_watchlist.png';
+    watchlistButtonBox.appendChild(watchlistButton);
+  }
 }
 
 function updateHome(followed, toAdd) {
@@ -365,7 +402,7 @@ function displayUserSearchResult(result) {
   document.querySelector(".tab-row-option[data-view-type='movie']")
     .removeEventListener('click', onTabRowOptionClick);
 
-  const searchResultBox = document.querySelector(".search-result-box");
+  const searchResultBox = document.querySelector(".search-results-box");home
   const resultBox = document.createElement("div");
   resultBox.setAttribute("data-user-id", result.id);
   resultBox.setAttribute("data-username", result.username);
@@ -463,7 +500,7 @@ function onBackIconClick() {
   document.querySelector(".tab-row-option[data-view-type='people']")
     .addEventListener('click', onTabRowOptionClick);
 
-  section.removeChild(document.querySelector(".search-result-box"));
+  section.removeChild(document.querySelector(".search-results-box"));
   document.getElementById("home-posts").classList.remove("hidden");
 
   updateHome();
@@ -479,10 +516,10 @@ function onSearchPeopleButtonClick(event) {
     .then(response => response.json())
     .then(json => {
       if (json.success) {
-        const s = document.querySelector(".search-result-box");
+        const s = document.querySelector(".search-results-box");
         if (s) section.removeChild(s);
         const searchResultBox = document.createElement('div');
-        searchResultBox.classList.add("search-result-box");
+        searchResultBox.classList.add("search-results-box");
         section.appendChild(searchResultBox)
 
         const backIconBox = document.createElement('div');
@@ -513,10 +550,10 @@ function onSearchMovieButtonClick(event) {
     .then(response => response.json())
     .then(json => {
       if (json.success) {
-        const s = document.querySelector(".search-result-box");
+        const s = document.querySelector(".search-results-box");
         if (s) section.removeChild(s);
         const searchResultBox = document.createElement('div');
-        searchResultBox.classList.add("search-result-box");
+        searchResultBox.classList.add("search-results-box");
         section.appendChild(searchResultBox)
 
         const backIconBox = document.createElement('div');

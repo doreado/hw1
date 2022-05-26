@@ -65,7 +65,7 @@ div#icon-links {
   display: flex;
 }
 
-.post, .search-result-box {
+.post, .search-results-box {
   background-color: var(--quick-silver);
   padding: 10px;
   margin-bottom: 10px;
@@ -73,6 +73,9 @@ div#icon-links {
   border-radius: 5px;
 }
 
+.result-box-left {
+  display: flex;;
+}
 div#post-text {
   border-bottom: 2px solid var(--gb-gray_244);
   height: 100%;
@@ -144,6 +147,8 @@ div#post-text {
 
 .result-box {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .users-result-box {
@@ -157,13 +162,21 @@ div#post-text {
   align-items: center;
 }
 
-.icon-box:hover, .follow-button:hover, .back-icon:hover, .result-box:hover {
+.watchlist-button-box:hover, .icon-box:hover, .follow-button:hover, .back-icon:hover, .result-box:hover {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
 .poster {
   height: 100%;
 }
-/* .search-result-box { */
-/**/
-/* } */
+
+.watchlist-button-box {
+  height: 30px;
+  width: 30px;
+  padding: 0.5em;
+  border-radius: 1em;
+}
+
+.watchlist-button {
+  height: 100%;
+}

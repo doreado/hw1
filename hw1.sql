@@ -75,12 +75,10 @@ CREATE TABLE LIKE_COMMENT (
 
 CREATE TABLE WANTLIST (
     user        INT NOT NULL,
-    type        INT NOT NULL,
+    type        VARCHAR(255) NOT NULL,
     type_id     INT NOT NULL,
     time        TIMESTAMP NOT NULL,
 
     PRIMARY KEY(user, type, type_id),
     FOREIGN KEY(user) REFERENCES USER(id)
 ) ENGINE=InnoDb;
-
------------------------
