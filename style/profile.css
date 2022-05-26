@@ -88,9 +88,10 @@ div.view.hidden {
 .entry-recently {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 
-.recently-left {
+#recently-left {
   display: flex;
 }
 
@@ -109,3 +110,22 @@ div.view.hidden {
 .icon {
   height: 100%;
 }
+
+.x-icon-box {
+  display: flex;
+  height: 20px;
+  align-items: center;
+  padding: 0.75em;
+  border-radius: 0.5em;
+}
+
+.x-icon-box:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.x-icon {
+  height: 100%;
+  border-radius: 50%;
+  padding: 2px;
+}
+

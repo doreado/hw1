@@ -18,20 +18,25 @@ function displayPost(post, view) {
   postCurr.classList.add("entry-recently");
   view.appendChild(postCurr);
 
+  const leftElem = document.createElement("div");
+  leftElem.setAttribute("id", "recently-left");
+  postCurr.appendChild(leftElem);
+
   const posterBox = document.createElement("div");
   posterBox.classList.add("recently-poster-box");
-  postCurr.appendChild(posterBox);
+  leftElem.appendChild(posterBox);
+
   const poster = document.createElement("img");
   posterBox.appendChild(poster);
 
-  const rightElem = document.createElement("div");
-  rightElem.setAttribute("id", "recently-left");
-  postCurr.appendChild(rightElem);
+  const postInfo = document.createElement("div");
+  postInfo.setAttribute("id", "post-info");
+  leftElem.appendChild(postInfo);
 
   const movieTitle = document.createElement("h1");
-  rightElem.appendChild(movieTitle);
+  postInfo.appendChild(movieTitle);
   const movieReview = document.createElement("p");
-  rightElem.appendChild(movieReview);
+  postInfo.appendChild(movieReview);
   fetch("http://localhost/hw1/get_movie.php?id=" + post.type_id)
     .then(response => response.json())
     .then(json => {
@@ -41,6 +46,25 @@ function displayPost(post, view) {
         movieReview.textContent = post.content;
       }
     });
+
+  const xIconBox = document.createElement("div");
+  xIconBox.classList.add("x-icon-box");
+  postCurr.appendChild(xIconBox);
+  const xIcon = document.createElement("img");
+  xIcon.classList.add("x-icon");
+  xIcon.src = "figures/x_icon_dark.png";
+  xIconBox.append(xIcon);
+  xIconBox.addEventListener('click', _ => {
+    fetch("http://localhost/hw1/remove_post.php?post=" + post.id)
+      .then(response => response.json())
+      .then(json => {
+        if (!json.success) {
+          alert("E' successo qualcosa di strano");
+        } else {
+          postCurr.parentNode.removeChild(postCurr);
+        }
+      });
+  });
 }
 
 function viewPosts(data, view) {
@@ -95,7 +119,6 @@ function createRecently() {
     .then(response => response.json())
     .then(json => {
       if (json.success) {
-        console.log(json.data);
         viewPosts(json.data, view);
       } else {
         const hintBox = document.createElement("p");
