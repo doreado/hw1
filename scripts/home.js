@@ -46,6 +46,25 @@ function toggleLike(event) {
   // event.currentTarget.setAttribute("data-liked", !event.currentTarget.dataset.liked);
 }
 
+function getTime(timestamp) {
+  old = new Date(timestamp);
+  diff = Date.now() - old;
+  old = old.toLocaleDateString();
+  diff_s = diff / 1000;
+
+  if (diff_s / 60 <1) {
+    return parseInt(diff_s%60)+"s";
+  } else if (diff_s / 60 < 60) {
+    return parseInt(diff_s/60)+"m";
+  } else if (diff_s / 3600 <24) {
+    return parseInt(diff_s/3600) +"h";
+  } else if (diff_s/86400 < 30) {
+    return parseInt(diff_s/86400)+"gg";
+  } else {
+    return old;
+  }
+}
+
 function displayPost(post, view) {
   const postCurr = document.createElement("div");
   postCurr.setAttribute("id", post.id);
@@ -58,6 +77,9 @@ function displayPost(post, view) {
   const postHeaderLeft = document.createElement("div");
   postHeaderLeft.setAttribute("class", "post-header-left");
   postHeader.appendChild(postHeaderLeft);
+  const time = document.createElement("p");
+  time.textContent = getTime(post.time)
+  postHeader.appendChild(time);
 
   const profilePicBox = document.createElement("div");
   const profilePic = document.createElement("img");
