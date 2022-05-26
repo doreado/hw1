@@ -16,7 +16,7 @@ if (mysqli_num_rows($res) > 0) {
   $content = array();
   $count = 0;
   while ($row = mysqli_fetch_assoc($res)) {
-    $content[$count] = [ 'follower' => $row['follower'],
+    $content[$count] = [ 'id' => $row['follower'],
                          'profile_pic' => base64_encode($row['profile_pic'])
                       ];
     $count++;

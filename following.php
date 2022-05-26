@@ -15,7 +15,7 @@ if (mysqli_num_rows($res) > 0) {
   $success = true;
   $content = array();
   while ($row = mysqli_fetch_assoc($res)) {
-    $content[] = [ 'following' => $row['following'],
+    $content[] = [ 'id' => $row['following'],
                    'profile_pic' => base64_encode($row['profile_pic'])
                       ];
   }

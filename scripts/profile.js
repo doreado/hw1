@@ -161,10 +161,13 @@ function follower(view) {
         followerPicBox.classList.add("follower-pic-box");
         followerBox.appendChild(followerPicBox);
         for (let follower of followers) {
+          const followerProfile = document.createElement("a");
+          followerProfile.setAttribute("href", "http://localhost/hw1/profile.php?u=" + follower.id);
+          followerPicBox.appendChild(followerProfile);
           const pic = document.createElement("img");
           pic.classList.add("summary-profile-pic")
           pic.src = 'data:image/jpg;charset=utf8;base64,' + follower.profile_pic;
-          followerPicBox.appendChild(pic);
+          followerProfile.appendChild(pic);
         }
       } else {
         const hintBox = document.createElement("p");
@@ -194,10 +197,13 @@ function following(view) {
         followingBox.appendChild(followingPicBox);
 
         for (let following of followed) {
+          const followingProfile = document.createElement("a");
+          followingProfile.setAttribute("href", "http://localhost/hw1/profile.php?u=" + following.id);
+          followingPicBox.appendChild(followingProfile);
           const pic = document.createElement("img");
           pic.classList.add("summary-profile-pic")
           pic.src = 'data:image/jpg;charset=utf8;base64,' + following.profile_pic;
-          followingPicBox.appendChild(pic);
+          followingProfile.appendChild(pic);
         }
       } else {
         const hintBox = document.createElement("p");
@@ -282,6 +288,4 @@ fetch("http://localhost/hw1/is_logged_profile.php")
   .then(json => {
     if (json.result)
       createSettings();
-    else {
-    }
   })
