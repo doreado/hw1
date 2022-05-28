@@ -506,7 +506,9 @@ function onBackIconClick() {
 
   section.removeChild(document.querySelector(".search-results-box"));
   document.getElementById("home-posts").classList.remove("hidden");
-  document.getElementById("more-results").classList.remove("hidden");
+
+  if (document.getElementById("more-results"))
+    document.getElementById("more-results").classList.add("hidden");
 
   updateHome();
 }
@@ -537,7 +539,8 @@ function onSearchPeopleButtonClick(event) {
         backIconBox.addEventListener('click', onBackIconClick);
 
         document.getElementById("home-posts").classList.add("hidden");
-        document.getElementById("more-results").classList.add("hidden");
+        if (document.getElementById("more-results"))
+          document.getElementById("more-results").classList.add("hidden");
         for (let result of json.data) {
           displayUserSearchResult(result);
         }
@@ -573,7 +576,8 @@ function onSearchMovieButtonClick(event) {
 
         // if (turnBack) return;
         document.getElementById("home-posts").classList.add("hidden");
-        document.getElementById("more-results").classList.add("hidden");
+        if (document.getElementById("more-results"))
+          document.getElementById("more-results").classList.add("hidden");
         // create search result layout
         for (let result of json.data) {
           displaySearchResult(result);
