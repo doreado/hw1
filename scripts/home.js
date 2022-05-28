@@ -65,12 +65,13 @@ function getTime(timestamp) {
   }
 }
 
-function displayPost(post, view) {
+function displayPost(post, view, onTop) {
   const postCurr = document.createElement("div");
   postCurr.setAttribute("id", post.id);
   postCurr.setAttribute("data-post-user-id", post.user);
   postCurr.classList.add("post");
-  view.insertBefore(postCurr, view.firstChild);
+  const ref = onTop ? view.firstChild : view.lastChild ? view.lastChild.nextSibling : null;
+  view.insertBefore(postCurr, ref);
 
   const postHeader = document.createElement("div");
   postHeader.setAttribute("class", "post-header");
@@ -170,8 +171,8 @@ function displayPost(post, view) {
 }
 
 function viewPosts(data, view) {
-  for (let post of data.reverse()) {
-    displayPost(post, view);
+  for (let post of data) {
+    displayPost(post, view, false);
   }
 }
 
@@ -179,10 +180,12 @@ function getPosts() {
   fetch("http://localhost/hw1/get_posts.php/?offset=" + offset)
     .then(response => response.json())
     .then(json => {
-      console.log(json);
       if (json.success) {
         viewPosts(json.content, document.querySelector("#home-posts"));
-        offset += 10;
+        if (json.end)
+          removeMoreResults();
+        else
+          offset += 10;
       } else {
         const mess = document.createElement("h1");
         mess.textContent = json.content;
@@ -237,10 +240,10 @@ function onResultBoxClick(event) {
 
   section.removeChild(document.querySelector(".search-results-box"));
   document.getElementById("home-posts").classList.remove("hidden");
+  document.getElementById("more-results").classList.remove("hidden");
 
   const searchMovieBox = document.getElementById("search-movie-box");
   for (let child of searchMovieBox.childNodes) {
-    console.log(child);
     child.classList.add("hidden");
   }
 
@@ -283,7 +286,8 @@ function onResultBoxClick(event) {
         .then(response => response.json())
         .then(json => {
           if (json.success) {
-            displayPost(json.data, document.querySelector("#home-posts"));
+            offset++;
+            displayPost(json.data, document.querySelector("#home-posts"), true);
 
             const searchMovieBox = document.getElementById('search-movie-box');
             const xIconBox = document.querySelector('.x-icon-box');
@@ -502,6 +506,7 @@ function onBackIconClick() {
 
   section.removeChild(document.querySelector(".search-results-box"));
   document.getElementById("home-posts").classList.remove("hidden");
+  document.getElementById("more-results").classList.remove("hidden");
 
   updateHome();
 }
@@ -531,7 +536,8 @@ function onSearchPeopleButtonClick(event) {
         backIconBox.appendChild(backIcon);
         backIconBox.addEventListener('click', onBackIconClick);
 
-        document.querySelector("#home-posts").classList.add("hidden");
+        document.getElementById("home-posts").classList.add("hidden");
+        document.getElementById("more-results").classList.add("hidden");
         for (let result of json.data) {
           displayUserSearchResult(result);
         }
@@ -566,7 +572,8 @@ function onSearchMovieButtonClick(event) {
         backIconBox.appendChild(backIcon);
 
         // if (turnBack) return;
-        document.querySelector("#home-posts").classList.add("hidden");
+        document.getElementById("home-posts").classList.add("hidden");
+        document.getElementById("more-results").classList.add("hidden");
         // create search result layout
         for (let result of json.data) {
           displaySearchResult(result);
@@ -594,7 +601,26 @@ function displayHomeHeader() {
   displayTabOption();
 }
 
+function createMoreResults() {
+  const more = document.createElement("button");
+  more.setAttribute('id', 'more-results');
+  more.textContent = 'Post più vecchi';
+  more.addEventListener('click', event => {
+    const clicked = event.currentTarget;
+    clicked.parentNode.removeChild(clicked);
+    getPosts();
+    createMoreResults();
+  })
+  section.appendChild(more);
+}
+
+function removeMoreResults() {
+  const moreResults = document.getElementById('more-results');
+  moreResults.parentNode.removeChild(moreResults);
+}
+
 const section = document.querySelector("section");
 
 displayHomeHeader();
 getPosts();
+createMoreResults();

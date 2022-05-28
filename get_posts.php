@@ -29,7 +29,9 @@ $query = "SELECT *
           LIMIT 10 OFFSET ".$offset.";";
 
 $res = mysqli_query($db, $query);
+$end = false;
 if (mysqli_num_rows($res) > 0) {
+  $end = mysqli_num_rows($res) < 10;
   $success = true;
   $content = array();
   while ($row = mysqli_fetch_assoc($res)) {
@@ -40,7 +42,6 @@ if (mysqli_num_rows($res) > 0) {
   $content = "Non ci sono post da visualizzare :(";
 }
 
-$response = ['success' => $success, 'content' => $content];
+$response = ['success' => $success, 'content' => $content, 'end' => $end];
 echo json_encode($response);
 ?>
-
