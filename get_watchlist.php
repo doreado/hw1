@@ -16,10 +16,15 @@ $query = "SELECT * FROM WANTLIST WHERE user=".$user_id.";";
 
 $res = mysqli_query($db, $query);
 if ($res) {
-  $success = true;
-  $data = array();
-  while ($row = mysqli_fetch_assoc($res)) {
-    $data[] = $row;
+  if (mysqli_num_rows($res) > 0) {
+    $success = true;
+    $data = array();
+    while ($row = mysqli_fetch_assoc($res)) {
+      $data[] = $row;
+    }
+  } else {
+      $success = false;
+      $data = "Non hai aggiunto film alla watchlist";
   }
 }
 

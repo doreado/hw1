@@ -204,16 +204,15 @@ function watchlist(view) {
   fetch("http://localhost/hw1/get_watchlist.php")
     .then(response => response.json())
     .then(json => {
+      const watchlist = document.createElement("div");
+      watchlist.classList.add("summary-box");
+      view.appendChild(watchlist);
+
+      const titleBox = document.createElement("h1");
+      titleBox.textContent = "Watchlist";
+      watchlist.appendChild(titleBox);
+
       if (json.success) {
-        console.log(json);
-        const watchlist = document.createElement("div");
-        watchlist.classList.add("summary-box");
-        view.appendChild(watchlist);
-
-        const titleBox = document.createElement("h1");
-        titleBox.textContent = "Watchlist";
-        watchlist.appendChild(titleBox);
-
         const posterBox = document.createElement("div");
         posterBox.classList.add("movie-poster-box");
         watchlist.appendChild(posterBox);
@@ -224,15 +223,14 @@ function watchlist(view) {
             .then(json => {
               const poster = document.createElement("img");
               poster.classList.add("movie-poster");
-              poster.src =  json.src;
+              poster.src = json.src;
               posterBox.appendChild(poster);
             })
         }
       } else {
         const hintBox = document.createElement("p");
-        hintBox.textContent = json.content;
-
-        watchedFilmsBox.appendChild(hintBox);
+        hintBox.textContent = json.data;
+        watchlist.appendChild(hintBox);
       }
     });
 }
