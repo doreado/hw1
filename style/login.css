@@ -5,11 +5,28 @@ html {
 }
 
 body {
+  margin: auto;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20%;
+  /* padding: 20%; */
+
+  background-color: #32302f;
+  border-width: 2px;
+  border-style: solid;
+  border-color: gainsboro;
+}
+
+#login-screen {
+  padding: 3em;
+  border-radius: 1em;
+  border-style: solid;
+  border-color: gainsboro;
+  background-color: whitesmoke;
+  align-items: center;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 h1 {
@@ -42,8 +59,4 @@ form {
   display: flex;
   flex-direction: row;
   align-items: center;
-}
-
-#new-user p {
-  color: var(--gb-light3);
 }

@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  /* background-color: var(--gray); */
 }
 
 header {
@@ -15,9 +16,21 @@ header {
 }
 
 section {
+  border-top: 2px solid gray;
   padding: 20px;
   margin: 0px 40px;
 }
+
+.tab-view {
+  padding: 2em;
+  border-bottom: 2px solid gainsboro;
+  border-right: 2px solid gainsboro;
+  border-left: 2px solid gainsboro;
+  border-bottom-left-radius: 1em ;
+  border-bottom-right-radius: 1em ;
+  background-color: whitesmoke;
+}
+
 
 div#username {
   display: flex;
@@ -61,15 +74,28 @@ div#profile-pic img, .post-profile-pic, .summary-profile-pic {
   height: 100%;
 }
 
+.follower-pic-box a, .following-pic-box a {
+  margin-left: 1em;
+}
+
 div.view.hidden {
   display: none;
 }
 
 .movie-poster-box, .pic-box, .follower-pic-box, .following-pic-box {
   display: flex;
+  overflow: auto;
+  white-space: nowrap;
   flex-direction: row;
-  width: 30px;
+  /* width: 30px; */
   height: 100px;
+}
+
+.following-pic-box::-webkit-scrollbar,
+.follower-pic-box::-webkit-scrollbar,
+.pic-box::-webkit-scrollbar,
+.movie-poster-box::-webkit-scrollbar {
+  display: none;
 }
 
 .movie-poster, .recently-poster-box{

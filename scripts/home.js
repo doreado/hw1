@@ -27,9 +27,7 @@ function incLike(target) {
 
 function toggleLike(event) {
   let lastStatus = event.currentTarget.dataset.liked;
-  // console.log("clicked " + clicked);
-  // clicked = clicked === "false" ? "true" : "false";
-  event.currentTarget.dataset.liked = event.currentTarget.dataset.liked === "false" ? "true" : "false";
+  event.currentTarget.dataset.liked = event.currentTarget.dataset.liked !== "true";
 
   let img = document.querySelector("[data-post-id='"
     + event.currentTarget.dataset.postId + "'] img");
@@ -43,7 +41,6 @@ function toggleLike(event) {
     img.src = 'figures/ciak_light.png';
     decLike(event.currentTarget);
   }
-  // event.currentTarget.setAttribute("data-liked", !event.currentTarget.dataset.liked);
 }
 
 function getTime(timestamp) {
@@ -65,13 +62,20 @@ function getTime(timestamp) {
   }
 }
 
-function displayPost(post, view, onTop) {
+function getPost(post, ref) {
   const postCurr = document.createElement("div");
   postCurr.setAttribute("id", post.id);
   postCurr.setAttribute("data-post-user-id", post.user);
   postCurr.classList.add("post");
+
+  return postCurr;
+}
+
+function displayPost(post, view, onTop) {
   const ref = onTop ? view.firstChild : view.lastChild ? view.lastChild.nextSibling : null;
-  view.insertBefore(postCurr, ref);
+
+  const newPost = getPost(post, ref);
+  view.insertBefore(newPost, ref);
 
   const postHeader = document.createElement("div");
   postHeader.setAttribute("class", "post-header");
@@ -109,17 +113,17 @@ function displayPost(post, view, onTop) {
         postProfileName.textContent = json.username;
       }
     });
-  postCurr.appendChild(postHeader);
+  newPost.appendChild(postHeader);
 
   const postText = document.createElement("p");
   postText.textContent = post.content;
-  postCurr.appendChild(postText);
+  newPost.appendChild(postText);
 
   const postPicBox = document.createElement("div");
   postPicBox.setAttribute("id", "post-pic-box");
   const postPic = document.createElement("img");
   postPicBox.appendChild(postPic);
-  postCurr.appendChild(postPicBox);
+  newPost.appendChild(postPicBox);
 
   fetch("http://localhost/hw1/get_movie_poster.php?movie_id=" + post.type_id)
     .then(response => response.json())
@@ -131,7 +135,7 @@ function displayPost(post, view, onTop) {
 
   const postFoot = document.createElement("div");
   postFoot.classList.add("post-foot");
-  postCurr.appendChild(postFoot);
+  newPost.appendChild(postFoot);
 
   const likeIconBox = document.createElement("div");
   likeIconBox.classList.add("icon-box");
@@ -160,14 +164,6 @@ function displayPost(post, view, onTop) {
         likeNum.textContent = json.num_like;
       }
     })
-
-  const commentIconBox = document.createElement("div");
-  commentIconBox.classList.add("icon-box");
-  postFoot.appendChild(commentIconBox);
-
-  const commentIcon = document.createElement("img");
-  commentIcon.src = './figures/comment_dark.png';
-  commentIconBox.appendChild(commentIcon);
 }
 
 function viewPosts(data, view) {
@@ -317,7 +313,6 @@ function onClickWatchlistButtonBox(event) {
     .then(response => response.json())
     .then(json => {
       if (json.success) {
-        console.log(json);
         const img = target.childNodes[0];
         img.dataset.inWatchlist = json.in_watchlist;
         img.src = json.in_watchlist ?
@@ -327,10 +322,6 @@ function onClickWatchlistButtonBox(event) {
 }
 
 function displaySearchResult(result) {
-  console.log(result);
-  document.querySelector(".tab-row-option[data-view-type='people']")
-    .removeEventListener('click', onTabRowOptionClick);
-
   const searchResultBox = document.querySelector(".search-results-box");
   const resultBox = document.createElement("div");
   resultBox.setAttribute("data-movie-id", result.id);
@@ -370,9 +361,11 @@ function displaySearchResult(result) {
   }
 }
 
-function updateHome(followed, toAdd) {
-  if (toAdd) {
+function updateHome(followed, newFollowing) {
+  if (newFollowing) {
     document.getElementById('home-posts-visible').innerHTML = '';
+    createMoreResults();
+
     offset = 0;
     getPosts();
   } else {
@@ -386,7 +379,6 @@ function updateHome(followed, toAdd) {
 function onFollowButton(event) {
   const clicked = event.currentTarget;
   const toFollow = clicked.dataset.followed !== 'true';
-  console.log("toFollow " + toFollow);
   clicked.setAttribute("data-followed", toFollow);
   clicked.src = toFollow ? 'figures/followed_dark.png' : 'figures/not_followed_dark.png';
   fetch("http://localhost/hw1/follow.php?followed_id="
@@ -402,17 +394,12 @@ function onFollowButton(event) {
 }
 
 function displayUserSearchResult(result) {
-  console.log(result);
-  document.querySelector(".tab-row-option[data-view-type='movie']")
-    .removeEventListener('click', onTabRowOptionClick);
-
-  const searchResultBox = document.querySelector(".search-results-box");home
+  const searchResultBox = document.querySelector(".search-results-box");
   const resultBox = document.createElement("div");
   resultBox.setAttribute("data-user-id", result.id);
   resultBox.setAttribute("data-username", result.username);
   resultBox.setAttribute("class", "users-result-box");
   searchResultBox.appendChild(resultBox);
-  // resultBox.addEventListener('click', onResultBoxClick);
 
   // aggiungi link per la pagina utente e il bottone per aggiunngere il profilo
   const posterBox = document.createElement("div");
@@ -508,37 +495,47 @@ function createPostFinished(msg) {
   mess.textContent = msg;
 }
 
-function onBackIconClick() {
-  document.querySelector(".tab-row-option[data-view-type='people']")
-    .addEventListener('click', onTabRowOptionClick);
-
+function onBackIconClick(event) {
   section.removeChild(document.querySelector(".search-results-box"));
   document.getElementById("home-posts").classList.remove("hidden");
   updateHome();
 }
 
-function onSearchPeopleButtonClick(event) {
-  const query = document.getElementById('input-people').value;
-  if (query.length == 0) {
-    return;
-  }
-
+function getSearchResultsBox(view) {
   const s = document.querySelector(".search-results-box");
   if (s) section.removeChild(s);
   const searchResultBox = document.createElement('div');
   searchResultBox.classList.add("search-results-box");
-  section.appendChild(searchResultBox)
+  view.appendChild(searchResultBox)
 
+  return searchResultBox;
+}
+
+function createBackIcon(view) {
   const backIconBox = document.createElement('div');
   backIconBox.classList.add('back-icon-box');
-  searchResultBox.appendChild(backIconBox);
+  view.appendChild(backIconBox);
   const backIcon = document.createElement('img');
   backIcon.classList.add("back-icon");
   backIcon.src = 'figures/back_icon_dark.png';
   backIconBox.appendChild(backIcon);
   backIconBox.addEventListener('click', onBackIconClick);
+}
 
+function createSearchResultBox(section) {
+  const searchResultBox =  getSearchResultsBox(section);
+  createBackIcon(searchResultBox);
   document.getElementById("home-posts").classList.add("hidden");
+}
+
+function onSearchPeopleButtonClick() {
+  const query = document.getElementById('input-people').value;
+  if (query.length == 0) {
+    return;
+  }
+
+  createSearchResultBox(section);
+
   fetch("http://localhost/hw1/search_users.php?u=" + query)
     .then(response => response.json())
     .then(json => {
@@ -556,22 +553,8 @@ function onSearchMovieButtonClick() {
     return;
   }
 
-  const s = document.querySelector(".search-results-box");
-  if (s) section.removeChild(s);
-  const searchResultBox = document.createElement('div');
-  searchResultBox.classList.add("search-results-box");
-  section.appendChild(searchResultBox)
+  createSearchResultBox(section);
 
-  const backIconBox = document.createElement('div');
-  backIconBox.classList.add('back-icon-box');
-  backIconBox.addEventListener('click', onBackIconClick);
-  searchResultBox.appendChild(backIconBox);
-  const backIcon = document.createElement('img');
-  backIcon.classList.add("back-icon");
-  backIcon.src = 'figures/back_icon_dark.png';
-  backIconBox.appendChild(backIcon);
-
-  document.getElementById("home-posts").classList.add("hidden");
   fetch("http://localhost/hw1/search_movie.php?movie=" + query)
     .then(response => response.json())
     .then(json => {
@@ -586,15 +569,12 @@ function onSearchMovieButtonClick() {
 function displayTabOption() {
   const inputMovie = document.getElementById("input-movie");
   const postText = document.getElementById("post-text");
-  // const postButton = document.getElementById("post-button");
-  // postButton.removeEventListener('click');
   const searchMovieButton = document.getElementById("search-film-button");
   const searchMoviBox = document.createElement("div")
   searchMoviBox.setAttribute("id", "search-movie-box")
   searchMovieButton.addEventListener('click', onSearchMovieButtonClick);
 }
 
-// const profilePicHome = document.querySelector("profile-pic-home")
 function displayHomeHeader() {
   displayTabRowOption();
   displayProfilePic();
@@ -602,25 +582,29 @@ function displayHomeHeader() {
 }
 
 function createMoreResults() {
-  const more = document.createElement("button");
+  let more = document.getElementById('more-results');
+  if (more) return;
+  more = document.createElement("button");
+  const homePosts = document.getElementById("home-posts");
   more.setAttribute('id', 'more-results');
   more.textContent = 'Post più vecchi';
   more.addEventListener('click', event => {
     const clicked = event.currentTarget;
     clicked.parentNode.removeChild(clicked);
     getPosts();
-    createMoreResults();
+    /* createMoreResults(); */
   })
-  section.appendChild(more);
+  homePosts.appendChild(more);
 }
 
 function removeMoreResults() {
   const moreResults = document.getElementById('more-results');
-  moreResults.parentNode.removeChild(moreResults);
+  if (moreResults)
+    moreResults.parentNode.removeChild(moreResults);
 }
 
 const section = document.querySelector("section");
 
+createNav('home');
 displayHomeHeader();
 getPosts();
-createMoreResults();

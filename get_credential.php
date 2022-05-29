@@ -54,7 +54,7 @@ if (mysqli_num_rows($res) > 0) {
   $response = [ 'message' => $message, 'success' => $success ];
   mysqli_close($db);
   echo json_encode($response);
-} 
+}
 
 $name = mysqli_real_escape_string($db, $_POST['name']);
 $surname = mysqli_real_escape_string($db, $_POST['surname']);

@@ -1,5 +1,26 @@
 @import url(./colors.css);
 
+#site-name {
+  font-family: 'Frijole', cursive;
+  font-style: italic;
+  font-size: 1.75em;
+  font-weight: bold;
+
+  color: red !important;
+}
+
+#login-screen, #signup-screen {
+  padding: 3em;
+  border-radius: 1em;
+  border-style: solid;
+  border-color: gainsboro;
+  background-color: whitesmoke;
+  align-items: center;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
 nav {
   z-index: 1;
   position: fixed;
@@ -7,15 +28,15 @@ nav {
   left: 0;
   right: 0;
   padding: 2px 20px;
-
   background-color: var(--gb-dark0_soft);
-
+  border-bottom: 5px solid gainsboro;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 #nav-title {
+  z-index: 3;
   font-size: 24px;
   font-weight: bold;
 }
@@ -31,11 +52,11 @@ a {
 }
 
 a:link {
-  color: var(--ash-gray);
+  color: #006eff;
 }
 
 a:visited {
-  color: var(--ash-gray);
+  color: #006eff;
 }
 
 h1 {
@@ -88,30 +109,43 @@ p {
 }
 
 .tab-row {
-  color: var(--gb-light0);
+  color: black;
   display: flex;
   justify-content: center;
   /* flex-direction: row; */
   /* align-items: center; */
   justify-content: space-around;
-  margin: 4px 0px;
+  margin-top: 4px;
 }
 
 .tab-row-option {
   width: 100%;
   text-align: center;
-  border-bottom: 3px solid var(--gb-dark2);
+  border-bottom: 2px solid gainsboro;
 }
 
 .tab-row-option:hover{
   color:#000!important;
   background-color:#f1f1f1!important;
+  border-top-right-radius: 1em;
+  border-top-left-radius: 1em;
 }
 
 .tab-row-option.selected{
-  border-bottom: 3px solid var(--gb-neutral_red);
+  /* border-bottom: 3px solid var(--gb-neutral_red); */
+  background-color: whitesmoke;
+  border-top: 2px solid gainsboro;
+  border-left: 2px solid gainsboro;
+  border-right: 2px solid gainsboro;
+  border-bottom: 0px;
+  border-top-right-radius: 1em;
+  border-top-left-radius: 1em;
+}
+
+.tab-row-option.selected:hover {
+  background-color: unset;
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }

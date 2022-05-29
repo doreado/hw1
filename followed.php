@@ -10,7 +10,7 @@ require 'dbconf.php';
 $success = false;
 $followed = false;
 
-if ($_SESSION['user_id'] !== $_SESSION['profile']) {
+if ($_SESSION['user_id'] != $_SESSION['profile']) {
   $follower = mysqli_real_escape_string($db, $_SESSION['user_id']);
   $following = mysqli_real_escape_string($db, $_SESSION['profile']);
   $query = "SELECT * FROM FOLLOW WHERE follower='".$follower."' and following='".$following."';";

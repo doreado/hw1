@@ -1,6 +1,8 @@
 DROP DATABASE IF EXISTS hw1;
 CREATE DATABASE hw1;
 
+USE hw1;
+
 -- Creazione tabelle --
 CREATE TABLE USER (
     id          INT AUTO_INCREMENT PRIMARY KEY,
@@ -29,8 +31,15 @@ CREATE TABLE POST (
     type_id     VARCHAR(255) NOT NULL,
     time        TIMESTAMP NOT NULL,
 
+    KEY(user, type, type_id),
     FOREIGN KEY(user) REFERENCES USER(id)
 ) ENGINE=InnoDb;
+
+CREATE TRIGGER remove_in_watchlist
+AFTER INSERT
+ON POST FOR EACH ROW
+DELETE FROM WANTLIST WHERE user = NEW.user
+AND type_id = NEW.type_id;
 
 CREATE TABLE USER_PICS (
     user        INT NOT NULL,

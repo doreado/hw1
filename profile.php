@@ -17,23 +17,16 @@ if (!isset($_GET['u']) || !isset($_SESSION['user_id'])) {
     <link href="style/theme.css" rel="stylesheet">
     <!-- <link href="style/home.css" rel="stylesheet"> -->
     <link href="style/profile.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frijole&display=swap" rel="stylesheet">
+
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
     <script src="scripts/utils.js" defer="true"></script>
+    <script src="scripts/layouts.js" defer="true"></script>
     <script src="scripts/profile.js" defer="true"></script>
   </head>
   <body>
-  <nav>
-    <div id = "title-link">
-      <div id="nav-title"> MEDIASHARE </div>
-      <div><a id="home" href="home.php">HOME</a></div>
-    </div>
-
-    <div>
-      <a href="logout.php">Logout</a>
-      <div></div>
-    </div>
-  </nav>
-
   <header>
     <div id="cover"></div>
     <div id="profile-pic"></div>

@@ -6,10 +6,7 @@ if (!isset($_SESSION['user_id'])) {
   exit;
 }
 
-// if (isset($_SESSION['profile'])) {
 $_SESSION['profile'] = $_SESSION['user_id'];
-  // unset($_SESSION['profile']);
-// }
 ?>
 
 <!DOCTYPE html>
@@ -20,20 +17,14 @@ $_SESSION['profile'] = $_SESSION['user_id'];
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="style/theme.css" rel="stylesheet">
     <link href="style/home.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frijole&display=swap" rel="stylesheet">
+
+    <script src="scripts/layouts.js" defer="true"></script>
     <script src="scripts/home.js" defer="true"></script>
   </head>
   <body>
-  <nav>
-    <div id = "title-link">
-      <div id="nav-title"> MEDIASHARE </div>
-      <div> Benvenuto, <a id="profile" href="profile.php?u=<?php echo $_SESSION['user_id'];?>"><?php echo $_SESSION["username"]; ?></a> </div>
-    </div>
-
-    <div>
-      <a href="logout.php">Logout</a>
-    </div>
-  </nav>
   </body>
 
   <section>

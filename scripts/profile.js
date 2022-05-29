@@ -47,24 +47,26 @@ function displayPost(post, view) {
       }
     });
 
-  const xIconBox = document.createElement("div");
-  xIconBox.classList.add("x-icon-box");
-  postCurr.appendChild(xIconBox);
-  const xIcon = document.createElement("img");
-  xIcon.classList.add("x-icon");
-  xIcon.src = "figures/x_icon_dark.png";
-  xIconBox.append(xIcon);
-  xIconBox.addEventListener('click', _ => {
-    fetch("http://localhost/hw1/remove_post.php?post=" + post.id)
-      .then(response => response.json())
-      .then(json => {
-        if (!json.success) {
-          alert("E' successo qualcosa di strano");
-        } else {
-          postCurr.parentNode.removeChild(postCurr);
-        }
-      });
-  });
+  if (loggedProfile) {
+    const xIconBox = document.createElement("div");
+    xIconBox.classList.add("x-icon-box");
+    postCurr.appendChild(xIconBox);
+    const xIcon = document.createElement("img");
+    xIcon.classList.add("x-icon");
+    xIcon.src = "figures/x_icon_dark.png";
+    xIconBox.append(xIcon);
+    xIconBox.addEventListener('click', _ => {
+      fetch("http://localhost/hw1/remove_post.php?post=" + post.id)
+        .then(response => response.json())
+        .then(json => {
+          if (!json.success) {
+            alert("E' successo qualcosa di strano");
+          } else {
+            postCurr.parentNode.removeChild(postCurr);
+          }
+        });
+    });
+  }
 }
 
 function viewPosts(data, view) {
@@ -129,16 +131,16 @@ function createRecently() {
 }
 
 function watchedFilms(view) {
+  const watchedFilmsBox = document.createElement("div");
+  watchedFilmsBox.setAttribute("class", "summary-box");
+  view.appendChild(watchedFilmsBox);
+
+  const titleBox = document.createElement("h1");
+  titleBox.textContent = "Film visti";
+  watchedFilmsBox.appendChild(titleBox);
   fetch("http://localhost/hw1/watched_films.php")
     .then(response => response.json())
     .then(json => {
-      const watchedFilmsBox = document.createElement("div");
-      watchedFilmsBox.setAttribute("class", "summary-box");
-      view.appendChild(watchedFilmsBox);
-
-      const titleBox = document.createElement("h1");
-      titleBox.textContent = "Film visti";
-      watchedFilmsBox.appendChild(titleBox);
       if (json.success) {
         const posterBox = document.createElement("div");
         posterBox.classList.add("movie-poster-box");
@@ -159,24 +161,22 @@ function watchedFilms(view) {
         hintBox.textContent = json.content;
 
         watchedFilmsBox.appendChild(hintBox);
-        // const a = document.querySelector("div.summary-box.follower");
-        // if (a) watchedFilmsBox.insertBefore(hintBox, a);
       }
     });
 }
 
 function follower(view) {
+  const followerBox = document.createElement("div");
+  followerBox.setAttribute("class", "summary-box follower");
+  view.appendChild(followerBox);
+
+  const titleBox = document.createElement("h1");
+  titleBox.textContent = "Seguaci";
+  followerBox.appendChild(titleBox);
+
   fetch("http://localhost/hw1/follower.php")
     .then(response =>  response.json())
     .then(json => {
-      const followerBox = document.createElement("div");
-      followerBox.setAttribute("class", "summary-box follower");
-      view.appendChild(followerBox);
-
-      const titleBox = document.createElement("h1");
-      titleBox.textContent = "Seguaci";
-      followerBox.appendChild(titleBox);
-
       if (json.success) {
         const followers = json.content;
 
@@ -201,17 +201,17 @@ function follower(view) {
 }
 
 function watchlist(view) {
+  const watchlist = document.createElement("div");
+  watchlist.classList.add("summary-box");
+  view.appendChild(watchlist);
+
+  const titleBox = document.createElement("h1");
+  titleBox.textContent = "Watchlist";
+  watchlist.appendChild(titleBox);
+
   fetch("http://localhost/hw1/get_watchlist.php")
     .then(response => response.json())
     .then(json => {
-      const watchlist = document.createElement("div");
-      watchlist.classList.add("summary-box");
-      view.appendChild(watchlist);
-
-      const titleBox = document.createElement("h1");
-      titleBox.textContent = "Watchlist";
-      watchlist.appendChild(titleBox);
-
       if (json.success) {
         const posterBox = document.createElement("div");
         posterBox.classList.add("movie-poster-box");
@@ -236,17 +236,17 @@ function watchlist(view) {
 }
 
 function following(view) {
+  const followingBox = document.createElement("div");
+  followingBox.setAttribute("class", "summary-box following");
+  view.appendChild(followingBox);
+
+  const titleBox = document.createElement("h1");
+  titleBox.textContent = "Seguiti";
+  followingBox.appendChild(titleBox);
+
   fetch("http://localhost/hw1/following.php")
     .then(response => response.json())
     .then(json => {
-      const followingBox = document.createElement("div");
-      followingBox.setAttribute("class", "summary-box following");
-      view.appendChild(followingBox);
-
-      const titleBox = document.createElement("h1");
-      titleBox.textContent = "Seguiti";
-      followingBox.appendChild(titleBox);
-
       if (json.success) {
         const followed = json.content;
 
@@ -324,19 +324,13 @@ for (let view of views) {
     document.querySelector("div.view[data-view-type=" +
         event.currentTarget.dataset.viewType + "]")
         .classList.remove("hidden");
-
-    // console.log(event.currentTarget.dataset.viewType);
   });
 }
 
-const update = {
-  'recently': _ => console.log("recently"),
-  'summary': _ => console.log('summary'),
-  'settings': _ => console.log('settings'),
-};
-
 const selected = document.querySelector(".tab-row-option.selected");
 
+let loggedProfile;
+createNav('profile');
 getPics();
 getUsername();
 createSummary();
@@ -344,6 +338,7 @@ createRecently();
 fetch("http://localhost/hw1/is_logged_profile.php")
   .then(response => response.json())
   .then(json => {
-    if (json.result)
+    loggedProfile = json.result;
+    if (loggedProfile)
       createSettings();
   })

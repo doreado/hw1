@@ -1,8 +1,14 @@
 @import url(./colors.css);
 
+body {
+  margin: 0px;
+}
+
 section {
-  /* text-align: center; */
-  margin:  49px auto 0px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 49px auto 10px auto
 }
 
 #home-header {
@@ -22,6 +28,10 @@ section {
 
 .home-header-icon img{
   height: 100%
+}
+
+#title-link div {
+  color: whitesmoke;
 }
 
 #search-region, #new-post {
@@ -66,11 +76,12 @@ div#icon-links {
 }
 
 .post, .search-results-box {
-  background-color: var(--quick-silver);
+  width: 1012px;
+  background-color: whitesmoke;
   padding: 10px;
   margin-bottom: 10px;
-
   border-radius: 5px;
+  border: 2px solid gainsboro;
 }
 
 .result-box-left {
@@ -98,7 +109,7 @@ div#post-text {
   justify-content: space-between;
   align-items: center;
   padding: 4px;
-  border-top: 3px solid var(--ash-gray);
+  border-top: 3px solid gainsboro;
 }
 
 .icon-box {
@@ -116,7 +127,7 @@ div#post-text {
 }
 
 .view.hidden {
-  display: none;
+  display: none !important;
 }
 
 .back-icon-box {
@@ -137,7 +148,7 @@ div#post-text {
 .follow-button, .x-icon, .back-icon {
   height: 100%;
   border-radius: 50%;
-  padding: 2px;
+  padding: 0.25em;
 }
 
 .poster-box {
@@ -149,6 +160,7 @@ div#post-text {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 1em;
 }
 
 .users-result-box {
@@ -180,3 +192,44 @@ div#post-text {
 .watchlist-button {
   height: 100%;
 }
+
+.post-profile-name:visited {
+  color: black;
+}
+
+#more-results {
+  border-radius: 1em;
+  background-color: whitesmoke;
+  padding: 1em;
+  border: 2px;
+  border-style: solid;
+  border-color: gainsboro;
+}
+
+#home-posts-visible {
+  width: 100%;
+}
+
+#home-posts {
+  display: flex;
+  /* width: 100%; */
+  flex-direction: column;
+  align-items: center;
+}
+
+#more-results:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+@media (max-width: 1012px) {
+  section {
+    margin:  49px 0px auto 0px ;
+  }
+
+  #home-posts {
+    width: 100%;
+  }
+  .post {
+    width: auto;
+  }
+}
+

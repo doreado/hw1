@@ -43,8 +43,14 @@
 
 :root {
   --dutch-white: #e2d4b7;
-  --grullo: #9c9583;
+  --grullo: #c9583;
   --quick-silver: #a1a499;
   --silver-sand: #b0bbbf;
   --ash-gray: #cadbc8;
+}
+
+:root {
+  --light-blue: #eaf6f6;
+  --white: #fcfefe;
+  --gray: #e3e3e3;
 }
