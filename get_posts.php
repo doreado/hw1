@@ -28,6 +28,7 @@ $query = "SELECT *
           ORDER BY time DESC
           LIMIT 10 OFFSET ".$offset.";";
 
+$content = null;
 $res = mysqli_query($db, $query);
 
 $end = mysqli_num_rows($res) < 10;
