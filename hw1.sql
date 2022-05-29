@@ -60,28 +60,6 @@ CREATE TABLE LIKES (
     FOREIGN KEY(post) REFERENCES POST(id) ON DELETE CASCADE
 ) ENGINE=InnoDb;
 
-CREATE TABLE COMMENT (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
-    user        INT NOT NULL,
-    post        INT NOT NULL,
-    content     VARCHAR(255) NOT NULL,
-    response    INT NOT NULL,
-    time        TIMESTAMP NOT NULL,
-
-    FOREIGN KEY(user) REFERENCES USER(id),
-    FOREIGN KEY(post) REFERENCES POST(id)
-) ENGINE=InnoDb;
-
-CREATE TABLE LIKE_COMMENT (
-    user        INT NOT NULL,
-    comment     INT NOT NULL,
-    time        TIMESTAMP NOT NULL,
-
-    PRIMARY KEY(user, comment),
-    FOREIGN KEY(user) REFERENCES USER(id),
-    FOREIGN KEY(comment) REFERENCES COMMENT(id)
-) ENGINE=InnoDb;
-
 CREATE TABLE WANTLIST (
     user        INT NOT NULL,
     type        VARCHAR(255) NOT NULL,

@@ -339,6 +339,6 @@ fetch("http://localhost/hw1/is_logged_profile.php")
   .then(response => response.json())
   .then(json => {
     loggedProfile = json.result;
-    if (loggedProfile)
-      createSettings();
+    // if (loggedProfile)
+    //   createSettings();
   })
