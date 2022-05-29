@@ -29,19 +29,15 @@ $query = "SELECT *
           LIMIT 10 OFFSET ".$offset.";";
 
 $res = mysqli_query($db, $query);
-$end = false;
-if (mysqli_num_rows($res) > 0) {
-  $end = mysqli_num_rows($res) < 10;
-  $success = true;
-  $content = array();
-  while ($row = mysqli_fetch_assoc($res)) {
-    $content[] = $row;
-  }
-} else {
-  $success = false;
-  $content = "Non ci sono post da visualizzare :(";
+
+$end = mysqli_num_rows($res) < 10;
+$msg = $end ? "Perché non pubblichi un nuovo post?" : "";
+
+$empty = mysqli_num_rows($res) == 0;
+while (!$empty && ($row = mysqli_fetch_assoc($res))) {
+  $content[] = $row;
 }
 
-$response = ['success' => $success, 'content' => $content, 'end' => $end];
+$response = ['content' => $content, 'msg' => $msg, 'end' => $end, 'empty' => $empty];
 echo json_encode($response);
 ?>

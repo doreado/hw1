@@ -180,18 +180,20 @@ function getPosts() {
   fetch("http://localhost/hw1/get_posts.php/?offset=" + offset)
     .then(response => response.json())
     .then(json => {
-      if (json.success) {
-        viewPosts(json.content, document.querySelector("#home-posts"));
-        if (json.end)
-          removeMoreResults();
-        else
-          offset += 10;
+      if (json.empty) {
+        removeMoreResults();
+        createPostFinished(json.msg);
       } else {
-        const mess = document.createElement("h1");
-        mess.textContent = json.content;
-        section.appendChild(mess);
+        viewPosts(json.content, document.querySelector("#home-posts-visible"));
+        if (json.end) {
+          removeMoreResults();
+          createPostFinished(json.msg);
+        } else {
+          createMoreResults();
+          offset += 10;
+        }
       }
-    })
+    });
 }
 
 function createMovieView(movieView) {
@@ -240,7 +242,6 @@ function onResultBoxClick(event) {
 
   section.removeChild(document.querySelector(".search-results-box"));
   document.getElementById("home-posts").classList.remove("hidden");
-  document.getElementById("more-results").classList.remove("hidden");
 
   const searchMovieBox = document.getElementById("search-movie-box");
   for (let child of searchMovieBox.childNodes) {
@@ -371,13 +372,12 @@ function displaySearchResult(result) {
 
 function updateHome(followed, toAdd) {
   if (toAdd) {
-    document.getElementById('home-posts').innerHTML = '';
+    document.getElementById('home-posts-visible').innerHTML = '';
     offset = 0;
     getPosts();
   } else {
     const postsFollowed = document.querySelectorAll(".post[data-post-user-id='" + followed + "']");
     for (let post of postsFollowed) {
-      console.log(post);
       post.parentNode.removeChild(post);
     }
   }
@@ -500,16 +500,20 @@ function displayProfilePic() {
     });
 }
 
+function createPostFinished(msg) {
+  const mess = document.createElement("h1");
+  const homePosts = document.getElementById('home-posts');
+  mess.setAttribute('id', 'post-finished');
+  homePosts.appendChild(mess);
+  mess.textContent = msg;
+}
+
 function onBackIconClick() {
   document.querySelector(".tab-row-option[data-view-type='people']")
     .addEventListener('click', onTabRowOptionClick);
 
   section.removeChild(document.querySelector(".search-results-box"));
   document.getElementById("home-posts").classList.remove("hidden");
-
-  if (document.getElementById("more-results"))
-    document.getElementById("more-results").classList.add("hidden");
-
   updateHome();
 }
 
@@ -519,28 +523,26 @@ function onSearchPeopleButtonClick(event) {
     return;
   }
 
+  const s = document.querySelector(".search-results-box");
+  if (s) section.removeChild(s);
+  const searchResultBox = document.createElement('div');
+  searchResultBox.classList.add("search-results-box");
+  section.appendChild(searchResultBox)
+
+  const backIconBox = document.createElement('div');
+  backIconBox.classList.add('back-icon-box');
+  searchResultBox.appendChild(backIconBox);
+  const backIcon = document.createElement('img');
+  backIcon.classList.add("back-icon");
+  backIcon.src = 'figures/back_icon_dark.png';
+  backIconBox.appendChild(backIcon);
+  backIconBox.addEventListener('click', onBackIconClick);
+
+  document.getElementById("home-posts").classList.add("hidden");
   fetch("http://localhost/hw1/search_users.php?u=" + query)
     .then(response => response.json())
     .then(json => {
       if (json.success) {
-        const s = document.querySelector(".search-results-box");
-        if (s) section.removeChild(s);
-        const searchResultBox = document.createElement('div');
-        searchResultBox.classList.add("search-results-box");
-        section.appendChild(searchResultBox)
-
-        const backIconBox = document.createElement('div');
-        backIconBox.classList.add('back-icon-box');
-        searchResultBox.appendChild(backIconBox);
-        const backIcon = document.createElement('img');
-        backIcon.classList.add("back-icon");
-        backIcon.src = 'figures/back_icon_dark.png';
-        backIconBox.appendChild(backIcon);
-        backIconBox.addEventListener('click', onBackIconClick);
-
-        document.getElementById("home-posts").classList.add("hidden");
-        if (document.getElementById("more-results"))
-          document.getElementById("more-results").classList.add("hidden");
         for (let result of json.data) {
           displayUserSearchResult(result);
         }
@@ -548,40 +550,34 @@ function onSearchPeopleButtonClick(event) {
     })
 }
 
-function onSearchMovieButtonClick(event) {
+function onSearchMovieButtonClick() {
   const query = document.getElementById('input-movie').value;
   if (query.length == 0) {
     return;
   }
 
-  // console.log(inputMovie.value);
+  const s = document.querySelector(".search-results-box");
+  if (s) section.removeChild(s);
+  const searchResultBox = document.createElement('div');
+  searchResultBox.classList.add("search-results-box");
+  section.appendChild(searchResultBox)
+
+  const backIconBox = document.createElement('div');
+  backIconBox.classList.add('back-icon-box');
+  backIconBox.addEventListener('click', onBackIconClick);
+  searchResultBox.appendChild(backIconBox);
+  const backIcon = document.createElement('img');
+  backIcon.classList.add("back-icon");
+  backIcon.src = 'figures/back_icon_dark.png';
+  backIconBox.appendChild(backIcon);
+
+  document.getElementById("home-posts").classList.add("hidden");
   fetch("http://localhost/hw1/search_movie.php?movie=" + query)
     .then(response => response.json())
     .then(json => {
       if (json.success) {
-        const s = document.querySelector(".search-results-box");
-        if (s) section.removeChild(s);
-        const searchResultBox = document.createElement('div');
-        searchResultBox.classList.add("search-results-box");
-        section.appendChild(searchResultBox)
-
-        const backIconBox = document.createElement('div');
-        backIconBox.classList.add('back-icon-box');
-        backIconBox.addEventListener('click', onBackIconClick);
-        searchResultBox.appendChild(backIconBox);
-        const backIcon = document.createElement('img');
-        backIcon.classList.add("back-icon");
-        backIcon.src = 'figures/back_icon_dark.png';
-        backIconBox.appendChild(backIcon);
-
-        // if (turnBack) return;
-        document.getElementById("home-posts").classList.add("hidden");
-        if (document.getElementById("more-results"))
-          document.getElementById("more-results").classList.add("hidden");
-        // create search result layout
         for (let result of json.data) {
           displaySearchResult(result);
-          // add listener in result
         }
       }
     });

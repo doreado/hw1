@@ -40,7 +40,6 @@ $_SESSION['profile'] = $_SESSION['user_id'];
     <div id="home-header">
       <div id="profile-pic"></div>
       <div id="home-header-right">
-
         <div class="tab-row">
           <div class="tab-row-option selected home-header-icon" data-view-type="movie"></div>
           <div class="tab-row-option home-header-icon" data-view-type="people"></div>
@@ -48,6 +47,6 @@ $_SESSION['profile'] = $_SESSION['user_id'];
       </div>
     </div>
 
-    <div id="home-posts"></div>
+    <div id="home-posts"><div id="home-posts-visible"></div></div>
   </section>
 </html>
