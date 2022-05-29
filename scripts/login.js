@@ -59,7 +59,11 @@ function vali(event) {
         if (json.success) {
           window.location.href = json.message;
         } else {
-          console.log("NO BUONO");
+          const input = document.querySelector('input[type="submit"]')
+          const msg = document.createElement('div');
+          msg.setAttribute('class', 'error');
+          msg.textContent = 'Credenziali non valide!';
+          input.parentElement.appendChild(msg, input);
         }
       });
   }
